@@ -1,6 +1,7 @@
 package game.chess.gui;
 
 import java.awt.Dimension;
+import java.awt.GridBagLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,7 +13,7 @@ public class ChessGUI extends JFrame
 	private static Dimension appDimention = new Dimension(1000, 600);
 	
 	public static JFrame frame = new JFrame("Chess");
-	public static JPanel background = new JPanel();
+	public static JPanel background = new JPanel(new GridBagLayout());
 	public static BoardGUI board = new BoardGUI();
 	
 	public static int width;

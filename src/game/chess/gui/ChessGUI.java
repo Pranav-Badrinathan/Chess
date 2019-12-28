@@ -1,16 +1,17 @@
 package game.chess.gui;
 
-import java.awt.Dimension;
 import java.awt.GridBagLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import game.chess.Reference;
+
 public class ChessGUI extends JFrame 
 {
 	private static final long serialVersionUID = 1L;
 	
-	private static Dimension appDimention = new Dimension(1000, 600);
+	
 	
 	public static JFrame frame = new JFrame("Chess");
 	public static JPanel background = new JPanel(new GridBagLayout());
@@ -28,7 +29,7 @@ public class ChessGUI extends JFrame
 		frame.setResizable(false);
 	
 		//Set stuff that JPanel needs
-		background.setPreferredSize(appDimention);
+		background.setPreferredSize(Reference.appDimention);
 		
 		frame.getContentPane().add(background);
 		frame.pack();

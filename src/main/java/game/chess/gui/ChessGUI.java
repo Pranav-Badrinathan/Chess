@@ -11,8 +11,6 @@ public class ChessGUI extends JFrame
 {
 	private static final long serialVersionUID = 1L;
 	
-	
-	
 	public static JFrame frame = new JFrame("Chess");
 	public static JPanel background = new JPanel(new GridBagLayout());
 	public static BoardGUI board = new BoardGUI();

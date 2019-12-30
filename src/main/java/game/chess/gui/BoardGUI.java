@@ -1,11 +1,12 @@
 package game.chess.gui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
 
+import game.chess.enums.ChessColor;
+import game.chess.pieces.Queen;
 import game.chess.util.Reference;
 import game.chess.util.Vector2;
 
@@ -20,7 +21,6 @@ public class BoardGUI extends JPanel
 		this.setBackground(Color.BLACK);
 		this.setPreferredSize(Reference.boardDimention);
 		addTiles();
-		test();
 	}
 
 	/*
@@ -36,10 +36,12 @@ public class BoardGUI extends JPanel
 
 		for (int i = 0; i < 64; i++)
 		{
+			Tile toAdd;
+			
 			if (prvTileWasWhite)
-				this.add(new Tile(Color.GRAY, new Vector2(x, y)));
+				toAdd = new Tile(ChessColor.BLACK ,Color.GRAY, new Vector2(x, y));
 			else
-				this.add(new Tile(Color.WHITE, new Vector2(x, y)));
+				toAdd = new Tile(ChessColor.WHITE, Color.WHITE, new Vector2(x, y));
 			/*
 			 * Setup the positions: if x is 8 then reset it to 1 and add 1 to y
 			 */
@@ -49,6 +51,12 @@ public class BoardGUI extends JPanel
 				x = 1;
 				y++;
 			}
+			
+			//Piece Initialization
+			toAdd.piece = new Queen(ChessColor.BLACK);
+			toAdd.drawPieceSprite();
+			
+			this.add(toAdd);
 
 			/*
 			 * This here makes sure to not change the color of the tile if it is at the end
@@ -59,8 +67,8 @@ public class BoardGUI extends JPanel
 				prvTileWasWhite = !prvTileWasWhite;
 		}
 	}
-
-	private void test()
+	
+  /*private void test()
 	{
 		Component[] comps = this.getComponents();
 		Tile[] tiles = new Tile[comps.length];
@@ -73,5 +81,5 @@ public class BoardGUI extends JPanel
 		{
 			System.out.println("Tile " + (i + 1) + ": x = " + tiles[i].position.x + "; y = " + tiles[i].position.y + ";");
 		}
-	}
+	}*/
 }

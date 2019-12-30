@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import javax.swing.JPanel;
 
-import game.chess.Reference;
+import game.chess.util.Reference;
 import game.chess.util.Vector2;
 
 @SuppressWarnings("serial")

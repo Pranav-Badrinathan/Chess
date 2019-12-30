@@ -1,4 +1,4 @@
-package game.chess;
+package game.chess.util;
 
 import java.awt.Dimension;
 

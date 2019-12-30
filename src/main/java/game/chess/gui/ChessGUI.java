@@ -5,7 +5,7 @@ import java.awt.GridBagLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import game.chess.Reference;
+import game.chess.util.Reference;
 
 public class ChessGUI extends JFrame 
 {

@@ -41,7 +41,7 @@ public abstract class Piece
 	}
 	
 	//Draw Image related to this piece to the screen
-	public JLabel DrawImage(Image img)
+	public JLabel getSprite(Image img)
 	{
 		return new JLabel(new ImageIcon(img));
 	}

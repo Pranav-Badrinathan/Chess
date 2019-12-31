@@ -13,7 +13,7 @@ public class ChessGUI extends JFrame
 	
 	public static JFrame frame = new JFrame("Chess");
 	public static JPanel background = new JPanel(new GridBagLayout());
-	public static BoardGUI board = new BoardGUI();
+	public static Board board = new Board();
 	
 	public static int width;
 	public static int height;
@@ -33,6 +33,7 @@ public class ChessGUI extends JFrame
 		frame.pack();
 		
 		background.add(board);
+		BoardInit.Initialize(board);
 		
 		//Set the location of the JFrame and set it visible
 		frame.setLocationRelativeTo(null);

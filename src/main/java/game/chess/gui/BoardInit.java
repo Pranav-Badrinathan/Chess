@@ -2,9 +2,6 @@ package game.chess.gui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.GridLayout;
-
-import javax.swing.JPanel;
 
 import game.chess.enums.ChessColor;
 import game.chess.pieces.Bishop;
@@ -16,25 +13,19 @@ import game.chess.pieces.Rook;
 import game.chess.util.Reference;
 import game.chess.util.Vector2;
 
-@SuppressWarnings("serial")
-public class BoardGUI extends JPanel
+public class BoardInit
 {
-	GridLayout chessBoard = new GridLayout(8, 8);
-
-	public BoardGUI()
+	public static void Initialize(Board board) 
 	{
-		this.setLayout(chessBoard);
-		this.setBackground(Color.BLACK);
-		this.setPreferredSize(Reference.boardDimention);
-		addTiles();
-		initPieces(ChessColor.WHITE, ChessColor.BLACK);
+		addTiles(board);
+		initPieces(ChessColor.BLACK, ChessColor.WHITE, board);
 	}
-
+	
 	/*
 	 * This Method adds Tile objects to the BoardGUI object, horizontally from the
 	 * left to right and vertically from the top to the bottom, in a 8x8 grid;
 	 */
-	private void addTiles()
+	private static void addTiles(Board currentBoard)
 	{
 		// Black is represented by the false and White by true
 		boolean prvTileWasWhite = false;
@@ -59,7 +50,7 @@ public class BoardGUI extends JPanel
 				y++;
 			}
 
-			this.add(toAdd);
+			currentBoard.add(toAdd);
 
 			/*
 			 * This here makes sure to not change the color of the tile if it is at the end
@@ -71,9 +62,9 @@ public class BoardGUI extends JPanel
 		}
 	}
 
-	private void initPieces(ChessColor player, ChessColor opponent)
+	private static void initPieces(ChessColor player, ChessColor opponent, Board currentBoard)
 	{
-		Component[] comps = this.getComponents();
+		Component[] comps = currentBoard.getComponents();
 		Tile[] tiles = new Tile[comps.length];
 
 		for (int i = 0; i < comps.length; i++)
@@ -151,5 +142,4 @@ public class BoardGUI extends JPanel
 			tiles[63-i].drawPieceSprite();
 		}
 	}
-
 }

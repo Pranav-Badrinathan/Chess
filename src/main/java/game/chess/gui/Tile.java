@@ -20,7 +20,7 @@ public class Tile extends JPanel
 	public Vector2 position;
 
 	public Piece piece = null;
-
+	
 	public Tile(ChessColor tileColor, Color backgroundColor, Vector2 position)
 	{
 		this.tileColor = tileColor;

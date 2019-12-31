@@ -10,4 +10,7 @@ public final class Reference
 
 	public static final String blackPiecesUrl = "bin/assets/textures/black/";
 	public static final String whitePiecesUrl = "bin/assets/textures/white/";
+
+	public static final String[] piecePositions = { "rook", "knight", "bishop", "k/q", "k/q", "bishop", "knight",
+			"rook" };
 }

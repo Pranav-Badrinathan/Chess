@@ -1,12 +1,18 @@
 package game.chess.gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
 
 import game.chess.enums.ChessColor;
+import game.chess.pieces.Bishop;
+import game.chess.pieces.King;
+import game.chess.pieces.Knight;
+import game.chess.pieces.Pawn;
 import game.chess.pieces.Queen;
+import game.chess.pieces.Rook;
 import game.chess.util.Reference;
 import game.chess.util.Vector2;
 
@@ -21,6 +27,7 @@ public class BoardGUI extends JPanel
 		this.setBackground(Color.BLACK);
 		this.setPreferredSize(Reference.boardDimention);
 		addTiles();
+		initPieces(ChessColor.WHITE, ChessColor.BLACK);
 	}
 
 	/*
@@ -37,9 +44,9 @@ public class BoardGUI extends JPanel
 		for (int i = 0; i < 64; i++)
 		{
 			Tile toAdd;
-			
+
 			if (prvTileWasWhite)
-				toAdd = new Tile(ChessColor.BLACK ,Color.GRAY, new Vector2(x, y));
+				toAdd = new Tile(ChessColor.BLACK, Color.GRAY, new Vector2(x, y));
 			else
 				toAdd = new Tile(ChessColor.WHITE, Color.WHITE, new Vector2(x, y));
 			/*
@@ -51,11 +58,7 @@ public class BoardGUI extends JPanel
 				x = 1;
 				y++;
 			}
-			
-			//Piece Initialization
-			toAdd.piece = new Queen(ChessColor.BLACK);
-			toAdd.drawPieceSprite();
-			
+
 			this.add(toAdd);
 
 			/*
@@ -67,19 +70,86 @@ public class BoardGUI extends JPanel
 				prvTileWasWhite = !prvTileWasWhite;
 		}
 	}
-	
-  /*private void test()
+
+	private void initPieces(ChessColor player, ChessColor opponent)
 	{
 		Component[] comps = this.getComponents();
 		Tile[] tiles = new Tile[comps.length];
+
 		for (int i = 0; i < comps.length; i++)
 		{
 			tiles[i] = (Tile) comps[i];
 		}
-		
-		for (int i = 0; i < tiles.length; i++)
+
+		//Add all the pieces to be used by the opponent
+		for (int i = 0; i <= 15; i++)
 		{
-			System.out.println("Tile " + (i + 1) + ": x = " + tiles[i].position.x + "; y = " + tiles[i].position.y + ";");
+			if (i <= 7)
+			{
+				switch (Reference.piecePositions[i])
+				{
+					case "rook":
+						tiles[i].piece = new Rook(opponent);
+						break;
+					case "knight":
+						tiles[i].piece = new Knight(opponent);
+						break;
+					case "bishop":
+						tiles[i].piece = new Bishop(opponent);
+						break;
+					case "k/q":
+					{
+						if (tiles[i].getTileColor() == opponent)
+							tiles[i].piece = new Queen(opponent);
+						else
+							tiles[i].piece = new King(opponent);
+					}
+						break;
+
+					default:
+						break;
+				}
+			}
+			else
+				tiles[i].piece = new Pawn(opponent);
+			
+			tiles[i].drawPieceSprite();
 		}
-	}*/
+		
+		//Add all the pieces to be used by the player
+		for (int i = 0; i <= 15; i++)
+		{
+			if (i <= 7)
+			{
+				switch (Reference.piecePositions[i])
+				{
+					case "rook":
+						tiles[63-i].piece = new Rook(player);
+						break;
+					case "knight":
+						tiles[63-i].piece = new Knight(player);
+						break;
+					case "bishop":
+						tiles[63-i].piece = new Bishop(player);
+						break;
+					case "k/q":
+					{
+						if (tiles[63-i].getTileColor() == player)
+							tiles[63-i].piece = new Queen(player);
+						else
+							tiles[63-i].piece = new King(player);
+					}
+						break;
+
+					default:
+						break;
+				}
+			}
+			else
+				tiles[63-i].piece = new Pawn(player);
+			
+			tiles[63-i].drawPieceSprite();
+		}
+	}
+
 }

@@ -33,7 +33,7 @@ public class ChessGUI extends JFrame
 		frame.pack();
 		
 		background.add(board);
-		BoardInit.Initialize(board);
+		BoardHandler.Initialize(board);
 		
 		//Set the location of the JFrame and set it visible
 		frame.setLocationRelativeTo(null);

@@ -2,6 +2,9 @@ package game.chess.gui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import game.chess.enums.ChessColor;
 import game.chess.pieces.Bishop;
@@ -13,14 +16,18 @@ import game.chess.pieces.Rook;
 import game.chess.util.Reference;
 import game.chess.util.Vector2;
 
-public class BoardInit
+public class BoardHandler
 {
-	public static void Initialize(Board board) 
+	private static int to = -1;
+	private static int from = -1;
+
+	public static void Initialize(Board board)
 	{
 		addTiles(board);
 		initPieces(ChessColor.BLACK, ChessColor.WHITE, board);
+		mouseClickHandler(board);
 	}
-	
+
 	/*
 	 * This Method adds Tile objects to the BoardGUI object, horizontally from the
 	 * left to right and vertically from the top to the bottom, in a 8x8 grid;
@@ -65,14 +72,13 @@ public class BoardInit
 	private static void initPieces(ChessColor player, ChessColor opponent, Board currentBoard)
 	{
 		Component[] comps = currentBoard.getComponents();
-		Tile[] tiles = new Tile[comps.length];
-
+		Tile[] tiles = new Tile[64];
 		for (int i = 0; i < comps.length; i++)
 		{
 			tiles[i] = (Tile) comps[i];
 		}
 
-		//Add all the pieces to be used by the opponent
+		// Add all the pieces to be used by the opponent
 		for (int i = 0; i <= 15; i++)
 		{
 			if (i <= 7)
@@ -100,14 +106,13 @@ public class BoardInit
 					default:
 						break;
 				}
-			}
-			else
+			} else
 				tiles[i].piece = new Pawn(opponent);
-			
+
 			tiles[i].drawPieceSprite();
 		}
-		
-		//Add all the pieces to be used by the player
+
+		// Add all the pieces to be used by the player
 		for (int i = 0; i <= 15; i++)
 		{
 			if (i <= 7)
@@ -115,31 +120,90 @@ public class BoardInit
 				switch (Reference.piecePositions[i])
 				{
 					case "rook":
-						tiles[63-i].piece = new Rook(player);
+						tiles[63 - i].piece = new Rook(player);
 						break;
 					case "knight":
-						tiles[63-i].piece = new Knight(player);
+						tiles[63 - i].piece = new Knight(player);
 						break;
 					case "bishop":
-						tiles[63-i].piece = new Bishop(player);
+						tiles[63 - i].piece = new Bishop(player);
 						break;
 					case "k/q":
 					{
-						if (tiles[63-i].getTileColor() == player)
-							tiles[63-i].piece = new Queen(player);
+						if (tiles[63 - i].getTileColor() == player)
+							tiles[63 - i].piece = new Queen(player);
 						else
-							tiles[63-i].piece = new King(player);
+							tiles[63 - i].piece = new King(player);
 					}
 						break;
 
 					default:
 						break;
 				}
-			}
-			else
-				tiles[63-i].piece = new Pawn(player);
-			
-			tiles[63-i].drawPieceSprite();
+			} else
+				tiles[63 - i].piece = new Pawn(player);
+
+			tiles[63 - i].drawPieceSprite();
 		}
+	}
+
+	private static void mouseClickHandler(Board board)
+	{
+		Component[] comps = board.getComponents();
+		Tile[] tiles = new Tile[64];
+		for (int i = 0; i < comps.length; i++)
+		{
+			tiles[i] = (Tile) comps[i];
+		}
+
+		board.addMouseListener(new MouseAdapter()
+		{
+			public void mousePressed(MouseEvent e)
+			{
+				int x = e.getX();
+				int y = e.getY();
+
+				for (int i = 0; i < tiles.length; i++)
+				{
+					Rectangle tile = tiles[i].getBounds();
+					if (tile.x + tile.width > x && tile.x < x && tile.y + tile.height > y && tile.y < y)
+						selectTiles(tiles[i], i, board);
+				}
+			}
+		});
+	}
+
+	private static void selectTiles(Tile selectedTile, int index, Board board)
+	{	
+		if (from == -1 && selectedTile.piece != null)
+		{
+			from = index;
+		}
+		else if (from != -1 && to == -1)
+		{
+			to = index;
+			movePiece(from, to, board);
+			
+			from = -1;
+			to = -1;
+		}
+
+	}
+
+	private static void movePiece(int fromTileindex, int toTileindex, Board board)
+	{
+		Component[] comps = board.getComponents();
+		
+		Tile toTile = (Tile) comps[toTileindex];
+		Tile fromTile = (Tile) comps[fromTileindex];
+		
+		toTile.piece = fromTile.piece;
+		fromTile.piece = null;
+		
+		fromTile.drawPieceSprite();
+		toTile.drawPieceSprite();
+		
+		board.revalidate();
+		board.repaint();
 	}
 }

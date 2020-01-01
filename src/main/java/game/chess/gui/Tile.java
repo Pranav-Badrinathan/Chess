@@ -93,7 +93,13 @@ public class Tile extends JPanel
 					break;
 				}	
 			}
+			this.removeAll();
 			this.add(piece.getSprite(sprite));
+		}
+		else 
+		{
+			if(this.getComponentCount() != 0)
+			this.remove(getComponent(0));
 		}
 	}
 

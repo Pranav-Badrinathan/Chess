@@ -5,6 +5,9 @@ import java.awt.Component;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import game.chess.enums.ChessColor;
 import game.chess.pieces.Bishop;
@@ -28,6 +31,27 @@ public class BoardHandler
 		mouseClickHandler(board);
 	}
 
+	public static Tile getTile(Vector2 pos) 
+	{
+		Tile[] tiles = getBoardAsTiles(ChessGUI.board);
+		
+		List<Tile> t = Arrays.stream(tiles).filter(x->x.position.x == pos.x && x.position.y == pos.y).collect(Collectors.toList());
+		return t.get(0);
+	}
+	
+	private static Tile[] getBoardAsTiles(Board board) 
+	{
+		Component[] comps = board.getComponents();
+		Tile[] t = new Tile[comps.length];
+		
+		for (int i = 0; i < comps.length; i++)
+		{
+			t[i] = (Tile) comps[i];
+		}
+		
+		return t;
+	}
+	
 	/*
 	 * This Method adds Tile objects to the BoardGUI object, horizontally from the
 	 * left to right and vertically from the top to the bottom, in a 8x8 grid;
@@ -71,12 +95,7 @@ public class BoardHandler
 
 	private static void initPieces(ChessColor player, ChessColor opponent, Board currentBoard)
 	{
-		Component[] comps = currentBoard.getComponents();
-		Tile[] tiles = new Tile[64];
-		for (int i = 0; i < comps.length; i++)
-		{
-			tiles[i] = (Tile) comps[i];
-		}
+		Tile[] tiles = getBoardAsTiles(currentBoard);
 
 		// Add all the pieces to be used by the opponent
 		for (int i = 0; i <= 15; i++)
@@ -149,12 +168,7 @@ public class BoardHandler
 
 	private static void mouseClickHandler(Board board)
 	{
-		Component[] comps = board.getComponents();
-		Tile[] tiles = new Tile[64];
-		for (int i = 0; i < comps.length; i++)
-		{
-			tiles[i] = (Tile) comps[i];
-		}
+	 Tile[] tiles = getBoardAsTiles(board);
 
 		board.addMouseListener(new MouseAdapter()
 		{
@@ -196,6 +210,9 @@ public class BoardHandler
 		
 		Tile toTile = (Tile) comps[toTileindex];
 		Tile fromTile = (Tile) comps[fromTileindex];
+		
+		if(!fromTile.piece.isValidMove(fromTile, toTile))
+			return;
 		
 		toTile.piece = fromTile.piece;
 		fromTile.piece = null;

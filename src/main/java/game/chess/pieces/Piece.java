@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 
 import game.chess.enums.ChessColor;
 import game.chess.enums.PieceType;
-import game.chess.util.Vector2;
+import game.chess.gui.Tile;
 
 public abstract class Piece
 {
@@ -34,9 +34,15 @@ public abstract class Piece
 	}
 
 	//Check if the Move is a valid move
-	public boolean isValidMove(Vector2 currentPos, Vector2 targetPos)
+	public boolean isValidMove(Tile currentTile, Tile targetTile)
 	{
-		//TODO: Implement
+		// Don't move if the target Tile is the current Tile
+		if(currentTile.position == targetTile.position)
+			return false;
+		
+		if(targetTile.piece != null && this.pieceColor == targetTile.piece.pieceColor)
+			return false;
+		
 		return true;
 	}
 	

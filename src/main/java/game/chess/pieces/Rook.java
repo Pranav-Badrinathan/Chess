@@ -8,6 +8,11 @@ import game.chess.util.Vector2;
 
 public class Rook extends Piece
 {
+	/**
+	 * A child-class of {@link Piece}, and one of the pieces in the game of chess
+	 * 
+	 * @param pieceColor
+	 */
 	public Rook(ChessColor pieceColor)
 	{
 		super(PieceType.ROOK, pieceColor);
@@ -50,7 +55,6 @@ public class Rook extends Piece
 		for (int i = 0; i < steps; i++)
 		{
 			tempPos = new Vector2(tempPos.x + dir.x, tempPos.y + dir.y);
-			System.out.println(dir.x +" "+ dir.y);
 			if(BoardHandler.getTile(tempPos).piece != null)
 				return false;
 		}

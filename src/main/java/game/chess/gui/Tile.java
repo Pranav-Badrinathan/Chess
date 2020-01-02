@@ -12,6 +12,12 @@ import game.chess.util.Reference;
 import game.chess.util.SpriteRef;
 import game.chess.util.Vector2;
 
+/**
+ * This class represents a single {@code Tile} on the {@link Board}
+ * 
+ * @author Pranav Badrinathan
+ */
+
 @SuppressWarnings("serial")
 public class Tile extends JPanel
 {
@@ -21,6 +27,14 @@ public class Tile extends JPanel
 
 	public Piece piece = null;
 	
+	/**
+	 * Creates a new instance of the class {@link Tile} with its {@link ChessColor}, {@code background color} and
+	 * {@code position} set to the parameters 
+	 *  
+	 * @param tileColor
+	 * @param backgroundColor
+	 * @param position
+	 */
 	public Tile(ChessColor tileColor, Color backgroundColor, Vector2 position)
 	{
 		this.tileColor = tileColor;
@@ -29,6 +43,10 @@ public class Tile extends JPanel
 		this.setLayout(new GridBagLayout());
 	}
 
+	/**
+	 * Draws this {@link Tile}'s {@link Piece}'s image onto the screen
+	 * @author Pranav Badrinathan
+	 */
 	public void drawPieceSprite()
 	{
 		int width = Reference.pieceSpriteDimention.width;
@@ -103,6 +121,12 @@ public class Tile extends JPanel
 		}
 	}
 
+	/**
+	 * A Getter for the field tileColor
+	 * 
+	 * @return the {@link ChessColor} of this instance of the {@link Tile} class
+	 * @author Pranav Badrinathan
+	 */
 	public ChessColor getTileColor()
 	{
 		return tileColor;

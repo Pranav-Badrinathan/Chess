@@ -18,6 +18,10 @@ public class ChessGUI extends JFrame
 	public static int width;
 	public static int height;
 	
+	/**
+	 * Creates the {@code JFrame} and adds the chess board, {@link Board}, to the frame.<br>
+	 * Initializes everything that follows.
+	 */
 	public static void createFrame() 
 	{
 		JFrame.setDefaultLookAndFeelDecorated(true);

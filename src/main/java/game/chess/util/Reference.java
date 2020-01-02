@@ -2,6 +2,13 @@ package game.chess.util;
 
 import java.awt.Dimension;
 
+/**
+ * A class that stores all the 'Global', or all the {@code static final} variables that will never be
+ * updated
+ * 
+ * @author Pranav Badrinathan
+ */
+
 public final class Reference
 {
 	public static final Dimension appDimention = new Dimension(1000, 600);

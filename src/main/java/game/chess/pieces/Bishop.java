@@ -8,6 +8,11 @@ import game.chess.util.Vector2;
 
 public class Bishop extends Piece
 {
+	/**
+	 * A child-class of {@link Piece}, and one of the pieces in the game of chess
+	 * 
+	 * @param pieceColor
+	 */
 	public Bishop(ChessColor pieceColor)
 	{
 		super(PieceType.BISHOP, pieceColor);

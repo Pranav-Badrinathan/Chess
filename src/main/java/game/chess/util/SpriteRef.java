@@ -5,6 +5,13 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import game.chess.gui.Tile;
+
+/**
+ * Declares and initializes the Image variables utilized by {@link Tile#drawPieceSprite()}
+ * 
+ * @author Pranav Badrinathan
+ */
 public final class SpriteRef
 {
 	public static BufferedImage blackPawn;

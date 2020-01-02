@@ -9,6 +9,11 @@ import game.chess.enums.ChessColor;
 import game.chess.enums.PieceType;
 import game.chess.gui.Tile;
 
+/**
+ * Abstract super class that is inherited by all the individual piece classes
+ * 
+ * @author Pranav Badrinathan
+ */
 public abstract class Piece
 {
 	//The piece type (King, Rook, Pawn, etc.)
@@ -21,19 +26,34 @@ public abstract class Piece
 		this.pieceColor = pieceColor;
 	}
 	
-	//getter for protected variable 'PieceType type' 
+	/**
+	 * Getter for protected variable 'PieceType type'
+	 *  
+	 * @return the {@link PieceType} of this piece
+	 */
 	public PieceType getType()
 	{
 		return type;
 	}
 	
-	//getter for protected variable 'ChessColor pieceColor'
+	/**getter for protected variable 'ChessColor pieceColor'
+	 * 
+	 * @return the {@link ChessColor} of this piece
+	 */
 	public ChessColor getColor()
 	{
 		return pieceColor;
 	}
 
-	//Check if the Move is a valid move
+	/**
+	 * Checks if the movement from {@code currentTile} to {@code targetTile} is a valid move
+	 * for this {@link PieceType}
+	 * 
+	 * @param currentTile
+	 * @param targetTile
+	 * @return a boolean that reflects if it is a valid move {@code currentTile} to {@code targetTile}
+	 * or if its not
+	 */
 	public boolean isValidMove(Tile currentTile, Tile targetTile)
 	{
 		// Don't move if the target Tile is the current Tile
@@ -46,7 +66,12 @@ public abstract class Piece
 		return true;
 	}
 	
-	//Draw Image related to this piece to the screen
+	/**
+	 * Draw Image related to this piece to the screen
+	 * 
+	 * @param img
+	 * @return a {@code JLabel} that has its {@code ImageIcon} set to {@code img}
+	 */
 	public JLabel getSprite(Image img)
 	{
 		return new JLabel(new ImageIcon(img));

@@ -15,6 +15,7 @@ import game.chess.pieces.Bishop;
 import game.chess.pieces.King;
 import game.chess.pieces.Knight;
 import game.chess.pieces.Pawn;
+import game.chess.pieces.Piece;
 import game.chess.pieces.Queen;
 import game.chess.pieces.Rook;
 import game.chess.util.Reference;
@@ -277,5 +278,23 @@ public class BoardHandler
 		
 		board.revalidate();
 		board.repaint();
+		
+		toTile.piece = checkPromotion(toTile);
+		
+		toTile.drawPieceSprite();
+		
+		toTile.revalidate();
+		toTile.repaint();
+	}
+	
+	private static Piece checkPromotion(Tile toTile) 
+	{
+		if(toTile.piece instanceof Pawn && ((toTile.position.y == 8 && toTile.piece.getColor() == ChessGUI.opponent.color) || (toTile.position.y == 1 && toTile.piece.getColor() == ChessGUI.player.color)))
+		{
+			Pawn p = (Pawn) toTile.piece;
+			return p.getPromotedPiece();
+		}
+		
+		return toTile.piece;
 	}
 }

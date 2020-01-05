@@ -5,6 +5,8 @@ import java.awt.GridBagLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import game.chess.enums.ChessColor;
+import game.chess.util.Player;
 import game.chess.util.Reference;
 
 public class ChessGUI extends JFrame 
@@ -14,6 +16,9 @@ public class ChessGUI extends JFrame
 	public static JFrame frame = new JFrame("Chess");
 	public static JPanel background = new JPanel(new GridBagLayout());
 	public static Board board = new Board();
+	
+	public static Player player = new Player("player", ChessColor.BLACK);	
+	public static Player opponent = new Player("opponent", ChessColor.WHITE);	
 	
 	public static int width;
 	public static int height;

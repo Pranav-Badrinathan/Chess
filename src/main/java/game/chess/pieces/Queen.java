@@ -6,6 +6,11 @@ import game.chess.gui.Tile;
 
 public class Queen extends Piece
 {
+	/**
+	 * A child-class of {@link Piece}, and one of the pieces in the game of chess
+	 * 
+	 * @param pieceColor
+	 */
 	public Queen(ChessColor pieceColor)
 	{
 		super(PieceType.QUEEN, pieceColor);

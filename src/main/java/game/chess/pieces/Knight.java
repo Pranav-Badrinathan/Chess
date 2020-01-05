@@ -7,6 +7,11 @@ import game.chess.util.Vector2;
 
 public class Knight extends Piece
 {
+	/**
+	 * A child-class of {@link Piece}, and one of the pieces in the game of chess
+	 * 
+	 * @param pieceColor
+	 */
 	public Knight(ChessColor pieceColor)
 	{
 		super(PieceType.KNIGHT, pieceColor);

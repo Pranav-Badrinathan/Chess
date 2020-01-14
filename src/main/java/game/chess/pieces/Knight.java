@@ -38,7 +38,10 @@ public class Knight extends Piece
 			for (int i = 0; i < possiblePositions.length; i++)
 			{
 				if (possiblePositions[i].x == targetTile.position.x && possiblePositions[i].y == targetTile.position.y)
+				{
+					this.hasMoved = true;
 					return true;
+				}
 			}
 		}
 

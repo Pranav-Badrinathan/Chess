@@ -23,7 +23,10 @@ public class Queen extends Piece
 		Bishop b = new Bishop(pieceColor);
 		
 		if(r.isValidMove(currentTile, targetTile) || b.isValidMove(currentTile, targetTile))
+		{
+			this.hasMoved = true;
 			return true;
+		}
 		else
 			return false;
 	}

@@ -11,8 +11,6 @@ import game.chess.util.Vector2;
 
 public class Pawn extends Piece
 {
-	private boolean hasMoved = false;
-
 	/**
 	 * A child-class of {@link Piece}, and one of the pieces in the game of chess
 	 * 
@@ -44,7 +42,7 @@ public class Pawn extends Piece
 						return true;
 				}
 
-				if (!hasMoved)
+				if (!this.hasMoved)
 				{
 					if (!(currentTile.position.x == targetTile.position.x
 							&& (targetTile.position.y == currentTile.position.y - 1
@@ -72,7 +70,7 @@ public class Pawn extends Piece
 						return true;
 				}
 
-				if (!hasMoved)
+				if (!this.hasMoved)
 				{
 					if (!(currentTile.position.x == targetTile.position.x
 							&& (targetTile.position.y == currentTile.position.y + 1
@@ -105,7 +103,7 @@ public class Pawn extends Piece
 					return false;
 			}
 
-			hasMoved = true;
+			this.hasMoved = true;
 
 			return true;
 		}

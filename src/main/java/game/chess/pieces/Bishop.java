@@ -50,6 +50,7 @@ public class Bishop extends Piece
 				return false;
 		}
 		
+		this.hasMoved = true;
 		return true;
 	}
 }

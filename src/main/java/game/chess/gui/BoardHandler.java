@@ -28,6 +28,7 @@ public class BoardHandler
 
 	/**
 	 * Initializes the Board
+	 * 
 	 * @param board
 	 */
 	public static void Initialize(Board board)
@@ -45,39 +46,41 @@ public class BoardHandler
 	 * @see Vector2
 	 * @author Pranav Badrinathan
 	 */
-	public static Tile getTile(Vector2 pos) 
+	public static Tile getTile(Vector2 pos)
 	{
 		Tile[] tiles = getBoardAsTiles(ChessGUI.board);
-		
-		List<Tile> t = Arrays.stream(tiles).filter(x->x.position.x == pos.x && x.position.y == pos.y).collect(Collectors.toList());
+
+		List<Tile> t = Arrays.stream(tiles).filter(x -> x.position.x == pos.x && x.position.y == pos.y)
+				.collect(Collectors.toList());
 		return t.get(0);
 	}
-	
+
 	/**
 	 * Returns {@code board}'s child components as tiles
 	 * 
 	 * @param board
-	 * @return a {@link Tile}[] 
+	 * @return a {@link Tile}[]
 	 * @see Tile
 	 * @see Component
 	 * @author Pranav Badrinathan
 	 */
-	private static Tile[] getBoardAsTiles(Board board) 
+	private static Tile[] getBoardAsTiles(Board board)
 	{
 		Component[] comps = board.getComponents();
 		Tile[] t = new Tile[comps.length];
-		
+
 		for (int i = 0; i < comps.length; i++)
 		{
 			t[i] = (Tile) comps[i];
 		}
-		
+
 		return t;
 	}
-	
+
 	/**
 	 * Adds {@link Tile} objects to the {@link Board} object, horizontally from the
 	 * left to right and vertically from the top to the bottom, in a 8x8 grid;
+	 * 
 	 * @param board
 	 */
 	private static void addTiles(Board board)
@@ -95,8 +98,8 @@ public class BoardHandler
 				toAdd = new Tile(ChessColor.BLACK, Color.GRAY, new Vector2(x, y));
 			else
 				toAdd = new Tile(ChessColor.WHITE, Color.WHITE, new Vector2(x, y));
-			
-			//Setup the positions: if x is 8 then reset it to 1 and add 1 to y
+
+			// Setup the positions: if x is 8 then reset it to 1 and add 1 to y
 			x++;
 			if (x == 9)
 			{
@@ -117,9 +120,9 @@ public class BoardHandler
 	}
 
 	/**
-	 * Adds the chess pieces to the {@link Board} {@code board} object. Based on the player and 
-	 * opponent's {@link ChessColor} the player's {@link ChessColor} pieces will be added to the
-	 * bottom of the screen
+	 * Adds the chess pieces to the {@link Board} {@code board} object. Based on the
+	 * player and opponent's {@link ChessColor} the player's {@link ChessColor}
+	 * pieces will be added to the bottom of the screen
 	 * 
 	 * @param playerColor
 	 * @param opponentColor
@@ -159,7 +162,8 @@ public class BoardHandler
 					default:
 						break;
 				}
-			} else
+			}
+			else
 				tiles[i].piece = new Pawn(opponentColor);
 
 			tiles[i].drawPieceSprite();
@@ -193,7 +197,8 @@ public class BoardHandler
 					default:
 						break;
 				}
-			} else
+			}
+			else
 				tiles[63 - i].piece = new Pawn(playerColor);
 
 			tiles[63 - i].drawPieceSprite();
@@ -201,15 +206,15 @@ public class BoardHandler
 	}
 
 	/**
-	 * Detects when the mouse's left click button is pressed and gets the {@link Tile} 
-	 * that is clicked and selects it
+	 * Detects when the mouse's left click button is pressed and gets the
+	 * {@link Tile} that is clicked and selects it
 	 * 
 	 * @param board
 	 * @author Pranav Badrinathan
 	 */
 	private static void mouseClickHandler(Board board)
 	{
-	 Tile[] tiles = getBoardAsTiles(board);
+		Tile[] tiles = getBoardAsTiles(board);
 
 		board.addMouseListener(new MouseAdapter()
 		{
@@ -222,7 +227,9 @@ public class BoardHandler
 				{
 					Rectangle tile = tiles[i].getBounds();
 					if (tile.x + tile.width > x && tile.x < x && tile.y + tile.height > y && tile.y < y)
+					{
 						selectTiles(tiles[i], i, board);
+					}
 				}
 			}
 		});
@@ -236,16 +243,17 @@ public class BoardHandler
 	 * @param board
 	 */
 	private static void selectTiles(Tile selectedTile, int index, Board board)
-	{	
+	{
 		if (from == -1 && selectedTile.piece != null)
 		{
+			selectedTile.piece.onSelect(selectedTile);
 			from = index;
 		}
 		else if (from != -1 && to == -1)
 		{
 			to = index;
 			movePiece(from, to, board);
-			
+
 			from = -1;
 			to = -1;
 		}
@@ -253,8 +261,9 @@ public class BoardHandler
 	}
 
 	/**
-	 * Gets the {@link Tile} at {@code fromTileIndex} and {@code toTileIndex} and moves the
-	 * piece from the {@link Tile} at {@code fromTileIndex} to the {@link Tile} at {@code toTileIndex}
+	 * Gets the {@link Tile} at {@code fromTileIndex} and {@code toTileIndex} and
+	 * moves the piece from the {@link Tile} at {@code fromTileIndex} to the
+	 * {@link Tile} at {@code toTileIndex}
 	 * 
 	 * @param fromTileIndex
 	 * @param toTileIndex
@@ -263,38 +272,40 @@ public class BoardHandler
 	private static void movePiece(int fromTileIndex, int toTileIndex, Board board)
 	{
 		Component[] comps = board.getComponents();
-		
+
 		Tile toTile = (Tile) comps[toTileIndex];
 		Tile fromTile = (Tile) comps[fromTileIndex];
-		
-		if(!fromTile.piece.isValidMove(fromTile, toTile))
+
+		if (!fromTile.piece.isValidMove(fromTile, toTile))
 			return;
-		
+
 		toTile.piece = fromTile.piece;
 		fromTile.piece = null;
-		
+
 		fromTile.drawPieceSprite();
 		toTile.drawPieceSprite();
-		
+
 		board.revalidate();
 		board.repaint();
-		
+
 		toTile.piece = checkPromotion(toTile);
-		
+
 		toTile.drawPieceSprite();
-		
+
 		toTile.revalidate();
 		toTile.repaint();
 	}
-	
-	private static Piece checkPromotion(Tile toTile) 
+
+	private static Piece checkPromotion(Tile toTile)
 	{
-		if(toTile.piece instanceof Pawn && ((toTile.position.y == 8 && toTile.piece.getColor() == ChessGUI.opponent.color) || (toTile.position.y == 1 && toTile.piece.getColor() == ChessGUI.player.color)))
+		if (toTile.piece instanceof Pawn
+				&& ((toTile.position.y == 8 && toTile.piece.getColor() == ChessGUI.opponent.color)
+						|| (toTile.position.y == 1 && toTile.piece.getColor() == ChessGUI.player.color)))
 		{
 			Pawn p = (Pawn) toTile.piece;
 			return p.getPromotedPiece();
 		}
-		
+
 		return toTile.piece;
 	}
 }

@@ -27,4 +27,21 @@ public class Vector2
 		this.x = x;
 		this.y = y;
 	}
+	
+	public static Vector2 direction(Vector2 startPos, Vector2 endPos) 
+	{
+		Vector2 returnValue = new Vector2(endPos.x - startPos.x ,endPos.y - startPos.y);
+		
+		//Clamp the values
+		if(returnValue.x > 1)
+			returnValue.x = 1;
+		if(returnValue.y > 1)
+			returnValue.y = 1;
+		if(returnValue.x < -1)
+			returnValue.x = -1;
+		if(returnValue.y < -1)
+			returnValue.y = -1;
+		
+		return returnValue;
+	}
 }

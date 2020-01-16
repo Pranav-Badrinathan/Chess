@@ -34,7 +34,7 @@ public class BoardHandler
 	public static void Initialize(Board board)
 	{
 		addTiles(board);
-		initPieces(ChessColor.BLACK, ChessColor.WHITE, board);
+		initPieces(ChessGUI.player.color, ChessGUI.opponent.color, board);
 		mouseClickHandler(board);
 	}
 
@@ -95,9 +95,9 @@ public class BoardHandler
 			Tile toAdd;
 
 			if (prvTileWasWhite)
-				toAdd = new Tile(ChessColor.BLACK, Color.GRAY, new Vector2(x, y));
+				toAdd = new Tile(ChessColor.BLACK, Color.GRAY, new Vector2(x, y), i);
 			else
-				toAdd = new Tile(ChessColor.WHITE, Color.WHITE, new Vector2(x, y));
+				toAdd = new Tile(ChessColor.WHITE, Color.WHITE, new Vector2(x, y), i);
 
 			// Setup the positions: if x is 8 then reset it to 1 and add 1 to y
 			x++;
@@ -228,7 +228,7 @@ public class BoardHandler
 					Rectangle tile = tiles[i].getBounds();
 					if (tile.x + tile.width > x && tile.x < x && tile.y + tile.height > y && tile.y < y)
 					{
-						selectTiles(tiles[i], i, board);
+						selectTiles(tiles[i], i, board, false);
 					}
 				}
 			}
@@ -242,8 +242,9 @@ public class BoardHandler
 	 * @param index
 	 * @param board
 	 */
-	private static void selectTiles(Tile selectedTile, int index, Board board)
+	private static void selectTiles(Tile selectedTile, int index, Board board, boolean castle)
 	{
+
 		if (from == -1 && selectedTile.piece != null)
 		{
 			selectedTile.piece.onSelect(selectedTile);
@@ -269,7 +270,7 @@ public class BoardHandler
 	 * @param toTileIndex
 	 * @param board
 	 */
-	private static void movePiece(int fromTileIndex, int toTileIndex, Board board)
+	public static void movePiece(int fromTileIndex, int toTileIndex, Board board)
 	{
 		Component[] comps = board.getComponents();
 
@@ -283,17 +284,13 @@ public class BoardHandler
 		fromTile.piece = null;
 
 		fromTile.drawPieceSprite();
-		toTile.drawPieceSprite();
-
-		board.revalidate();
-		board.repaint();
 
 		toTile.piece = checkPromotion(toTile);
 
 		toTile.drawPieceSprite();
 
-		toTile.revalidate();
-		toTile.repaint();
+		board.revalidate();
+		board.repaint();
 	}
 
 	private static Piece checkPromotion(Tile toTile)

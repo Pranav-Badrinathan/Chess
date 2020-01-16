@@ -17,8 +17,8 @@ public class ChessGUI extends JFrame
 	public static JPanel background = new JPanel(new GridBagLayout());
 	public static Board board = new Board();
 	
-	public static Player player = new Player("player", ChessColor.BLACK);	
-	public static Player opponent = new Player("opponent", ChessColor.WHITE);	
+	public static Player player = new Player("player", ChessColor.WHITE);	
+	public static Player opponent = new Player("opponent", ChessColor.BLACK);	
 	
 	public static int width;
 	public static int height;

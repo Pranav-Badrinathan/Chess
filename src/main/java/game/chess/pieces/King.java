@@ -3,6 +3,7 @@ package game.chess.pieces;
 import game.chess.enums.ChessColor;
 import game.chess.enums.PieceType;
 import game.chess.gui.BoardHandler;
+import game.chess.gui.ChessGUI;
 import game.chess.gui.Tile;
 import game.chess.util.Vector2;
 
@@ -38,6 +39,11 @@ public class King extends Piece
 				{
 					if (queenSideCastle)
 					{
+						Tile from = BoardHandler.getTile(new Vector2(8, currentTile.position.y));
+						Tile to = BoardHandler.getTile(new Vector2(5, currentTile.position.y));
+						
+						BoardHandler.movePiece(from.index, to.index, ChessGUI.board);
+
 						this.hasMoved = true;
 						return true;
 					}
@@ -46,6 +52,11 @@ public class King extends Piece
 				{
 					if (kingSideCastle)
 					{
+						Tile from = BoardHandler.getTile(new Vector2(8, currentTile.position.y));
+						Tile to = BoardHandler.getTile(new Vector2(6, currentTile.position.y));
+						
+						BoardHandler.movePiece(from.index, to.index, ChessGUI.board);
+
 						this.hasMoved = true;
 						return true;
 					}
@@ -57,6 +68,11 @@ public class King extends Piece
 				{
 					if (kingSideCastle)
 					{
+						Tile from = BoardHandler.getTile(new Vector2(1, currentTile.position.y));
+						Tile to = BoardHandler.getTile(new Vector2(3, currentTile.position.y));
+						
+						BoardHandler.movePiece(from.index, to.index, ChessGUI.board);
+
 						this.hasMoved = true;
 						return true;
 					}
@@ -65,6 +81,11 @@ public class King extends Piece
 				{
 					if (queenSideCastle)
 					{
+						Tile from = BoardHandler.getTile(new Vector2(1, currentTile.position.y));
+						Tile to = BoardHandler.getTile(new Vector2(4, currentTile.position.y));
+						
+						BoardHandler.movePiece(from.index, to.index, ChessGUI.board);
+
 						this.hasMoved = true;
 						return true;
 					}

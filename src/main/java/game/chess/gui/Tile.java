@@ -27,6 +27,8 @@ public class Tile extends JPanel
 
 	public Piece piece = null;
 	
+	public int index;
+	
 	/**
 	 * Creates a new instance of the class {@link Tile} with its {@link ChessColor}, {@code background color} and
 	 * {@code position} set to the parameters 
@@ -35,10 +37,11 @@ public class Tile extends JPanel
 	 * @param backgroundColor
 	 * @param position
 	 */
-	public Tile(ChessColor tileColor, Color backgroundColor, Vector2 position)
+	public Tile(ChessColor tileColor, Color backgroundColor, Vector2 position, int index)
 	{
 		this.tileColor = tileColor;
 		this.position = position;
+		this.index = index;
 		this.setBackground(backgroundColor);
 		this.setLayout(new GridBagLayout());
 	}

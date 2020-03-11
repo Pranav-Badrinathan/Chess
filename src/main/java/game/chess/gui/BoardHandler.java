@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,13 +47,43 @@ public class BoardHandler
 	 * @see Vector2
 	 * @author Pranav Badrinathan
 	 */
-	public static Tile getTile(Vector2 pos)
+	public static <T> Tile[] getTiles(T filter)
 	{
 		Tile[] tiles = getBoardAsTiles(ChessGUI.board);
+		List<Tile> t = new ArrayList<Tile>();
 
-		List<Tile> t = Arrays.stream(tiles).filter(x -> x.position.x == pos.x && x.position.y == pos.y)
-				.collect(Collectors.toList());
-		return t.get(0);
+		if (filter instanceof Vector2)
+		{
+			Vector2 pos = (Vector2) filter;
+			t = Arrays.stream(tiles).filter(x -> x.position.x == pos.x && x.position.y == pos.y)
+					.collect(Collectors.toList());
+		}
+		else if (filter instanceof Piece)
+		{
+			Piece p = (Piece) filter;
+			if (p != null)
+				t = Arrays.stream(tiles).filter(x -> x.piece != null && x.piece == p).collect(Collectors.toList());
+		}
+		else if (filter instanceof Integer)
+		{
+			int p = (int) filter;
+			t = Arrays.stream(tiles).filter(x -> x.index == p).collect(Collectors.toList());
+		}
+		else if (filter instanceof PieceType)
+		{
+			PieceType p = (PieceType) filter;
+
+			if (p != null)
+				t = Arrays.stream(tiles).filter(x -> x.piece != null && x.piece.getType() == p)
+						.collect(Collectors.toList());
+		}
+
+		for (int i = 0; i < t.size(); i++)
+		{
+			tiles[i] = (Tile) t.get(i);
+		}
+
+		return tiles;
 	}
 
 	/**
@@ -244,6 +275,7 @@ public class BoardHandler
 	 */
 	private static void selectTiles(Tile selectedTile, int index, Board board, boolean castle)
 	{
+		Component[] comps = board.getComponents();
 
 		if (from == -1 && selectedTile.piece != null)
 		{
@@ -253,8 +285,32 @@ public class BoardHandler
 		else if (from != -1 && to == -1)
 		{
 			to = index;
+			Tile fromTile = (Tile) comps[to];
+
 			movePiece(from, to, board);
 
+			Tile[] kings = getTiles(PieceType.KING);
+
+			King king1 = (King) kings[0].piece;
+			King king2 = (King) kings[1].piece;
+
+			if (king1.getColor() == fromTile.piece.getColor())
+			{
+				if (king1.isUnderCheck)
+				{
+					movePiece(to, from, board);
+					System.out.println("ILLEGAL MOVE!");
+				}
+			}
+			else if (king2.getColor() == fromTile.piece.getColor())
+			{
+				if (king2.isUnderCheck)
+				{
+					movePiece(to, from, board);
+					System.out.println("ILLEGAL MOVE!");
+				}
+			}
+			
 			from = -1;
 			to = -1;
 		}
@@ -291,8 +347,20 @@ public class BoardHandler
 
 		board.revalidate();
 		board.repaint();
+		setChecks(board);
 	}
 
+	/**
+	 * This method first checks if the {@link Tile} {@code toTile}'s piece is a
+	 * {@link Pawn}. If it is, then it checks if it is in the correct position for
+	 * being promoted based on {@link ChessColor}. If it is, then it is replaced
+	 * with a promoted {@link Piece} and returned. If any of these conditions fail,
+	 * then it is simply going to return the input value
+	 * 
+	 * @param toTile
+	 * @return Promoted version of {@code toTile.piece}
+	 * @author Pranav Badrinathan
+	 */
 	private static Piece checkPromotion(Tile toTile)
 	{
 		if (toTile.piece instanceof Pawn
@@ -304,5 +372,16 @@ public class BoardHandler
 		}
 
 		return toTile.piece;
+	}
+
+	private static void setChecks(Board board)
+	{
+		Tile[] kingTiles = getTiles(PieceType.KING);
+
+		King no1 = (King) kingTiles[0].piece;
+		King no2 = (King) kingTiles[1].piece;
+
+		no1.setCheck(getBoardAsTiles(board));
+		no2.setCheck(getBoardAsTiles(board));
 	}
 }

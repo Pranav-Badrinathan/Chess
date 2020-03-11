@@ -97,7 +97,7 @@ public class Pawn extends Piece
 				else if (tempPos.y < 1)
 					tempPos.y = 1;
 
-				Tile t = BoardHandler.getTile(tempPos);
+				Tile t = BoardHandler.getTiles(tempPos)[0];
 
 				if (t.piece != null)
 					return false;

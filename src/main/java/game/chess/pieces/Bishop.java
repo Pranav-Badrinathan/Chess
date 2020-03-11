@@ -46,7 +46,7 @@ public class Bishop extends Piece
 		for (int i = 0; i < steps; i++)
 		{
 			tempPos = new Vector2(tempPos.x + dir.x, tempPos.y + dir.y);
-			if(BoardHandler.getTile(tempPos).piece != null)
+			if(BoardHandler.getTiles(tempPos)[0].piece != null)
 				return false;
 		}
 		

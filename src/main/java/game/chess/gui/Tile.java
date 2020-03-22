@@ -26,7 +26,7 @@ public class Tile extends JPanel
 	public Vector2 position;
 
 	public Piece piece = null;
-	
+
 	public int index;
 	
 	/**

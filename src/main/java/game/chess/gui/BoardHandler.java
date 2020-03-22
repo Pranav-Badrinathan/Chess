@@ -95,7 +95,7 @@ public class BoardHandler
 	 * @see Component
 	 * @author Pranav Badrinathan
 	 */
-	private static Tile[] getBoardAsTiles(Board board)
+	public static Tile[] getBoardAsTiles(Board board)
 	{
 		Component[] comps = board.getComponents();
 		Tile[] t = new Tile[comps.length];
@@ -294,7 +294,7 @@ public class BoardHandler
 			King king1 = (King) kings[0].piece;
 			King king2 = (King) kings[1].piece;
 
-			if (king1.getColor() == fromTile.piece.getColor())
+			if (fromTile.piece != null && king1.getColor() == fromTile.piece.getColor())
 			{
 				if (king1.isUnderCheck)
 				{
@@ -302,7 +302,7 @@ public class BoardHandler
 					System.out.println("ILLEGAL MOVE!");
 				}
 			}
-			else if (king2.getColor() == fromTile.piece.getColor())
+			else if (fromTile.piece != null && king2.getColor() == fromTile.piece.getColor())
 			{
 				if (king2.isUnderCheck)
 				{
@@ -329,7 +329,7 @@ public class BoardHandler
 	public static void movePiece(int fromTileIndex, int toTileIndex, Board board)
 	{
 		Component[] comps = board.getComponents();
-
+		
 		Tile toTile = (Tile) comps[toTileIndex];
 		Tile fromTile = (Tile) comps[fromTileIndex];
 
@@ -374,6 +374,12 @@ public class BoardHandler
 		return toTile.piece;
 	}
 
+	/**
+	 * Set's the {@link King} piece's {@code isUnderCheck} variable based on the current board
+	 * 
+	 * @author Pranav Badrinathan
+	 * @param board
+	 */
 	private static void setChecks(Board board)
 	{
 		Tile[] kingTiles = getTiles(PieceType.KING);
@@ -381,7 +387,23 @@ public class BoardHandler
 		King no1 = (King) kingTiles[0].piece;
 		King no2 = (King) kingTiles[1].piece;
 
-		no1.setCheck(getBoardAsTiles(board));
-		no2.setCheck(getBoardAsTiles(board));
+		no1.setCheck();
+		no2.setCheck();
+	}
+
+	
+	public static Tile[] getTilesinCastlePath(Tile kingTile, Tile rookTile) 
+	{
+		ArrayList<Tile> tilesInBetween = new ArrayList<Tile>();
+		Vector2 dir = Vector2.direction(kingTile.position, rookTile.position);
+		
+		int xPos = kingTile.position.x;
+		
+		for (int i = 0; i < 2; i++)
+		{
+			xPos += dir.x;
+			tilesInBetween.add(getTiles(new Vector2(xPos, kingTile.position.y))[0]);
+		}
+		return tilesInBetween.toArray(new Tile[tilesInBetween.size()]);
 	}
 }

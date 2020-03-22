@@ -14,8 +14,8 @@ public class King extends Piece
 	
 	public boolean isUnderCheck;
 
-	private Piece rook1;
-	private Piece rook2;
+	private Tile rook1;
+	private Tile rook2;
 
 	public King(ChessColor pieceColor)
 	{
@@ -41,10 +41,9 @@ public class King extends Piece
 				{
 					if (queenSideCastle)
 					{
-						Tile from = BoardHandler.getTiles(new Vector2(8, currentTile.position.y))[0];
 						Tile to = BoardHandler.getTiles(new Vector2(5, currentTile.position.y))[0];
 						
-						BoardHandler.movePiece(from.index, to.index, ChessGUI.board);
+						BoardHandler.movePiece(rook2.index, to.index, ChessGUI.board);
 
 						this.hasMoved = true;
 						return true;
@@ -54,10 +53,9 @@ public class King extends Piece
 				{
 					if (kingSideCastle)
 					{
-						Tile from = BoardHandler.getTiles(new Vector2(8, currentTile.position.y))[0];
 						Tile to = BoardHandler.getTiles(new Vector2(6, currentTile.position.y))[0];
 						
-						BoardHandler.movePiece(from.index, to.index, ChessGUI.board);
+						BoardHandler.movePiece(rook2.index, to.index, ChessGUI.board);
 
 						this.hasMoved = true;
 						return true;
@@ -70,10 +68,9 @@ public class King extends Piece
 				{
 					if (kingSideCastle)
 					{
-						Tile from = BoardHandler.getTiles(new Vector2(1, currentTile.position.y))[0];
 						Tile to = BoardHandler.getTiles(new Vector2(3, currentTile.position.y))[0];
 						
-						BoardHandler.movePiece(from.index, to.index, ChessGUI.board);
+						BoardHandler.movePiece(rook1.index, to.index, ChessGUI.board);
 
 						this.hasMoved = true;
 						return true;
@@ -83,10 +80,9 @@ public class King extends Piece
 				{
 					if (queenSideCastle)
 					{
-						Tile from = BoardHandler.getTiles(new Vector2(1, currentTile.position.y))[0];
 						Tile to = BoardHandler.getTiles(new Vector2(4, currentTile.position.y))[0];
 						
-						BoardHandler.movePiece(from.index, to.index, ChessGUI.board);
+						BoardHandler.movePiece(rook1.index, to.index, ChessGUI.board);
 
 						this.hasMoved = true;
 						return true;
@@ -112,16 +108,16 @@ public class King extends Piece
 		// tiles that this piece can move on
 		super.onSelect(parentTile);
 
-		rook1 = BoardHandler.getTiles(new Vector2(1, parentTile.position.y))[0].piece;
-		rook2 = BoardHandler.getTiles(new Vector2(8, parentTile.position.y))[0].piece;
+		rook1 = BoardHandler.getTiles(new Vector2(1, parentTile.position.y))[0];
+		rook2 = BoardHandler.getTiles(new Vector2(8, parentTile.position.y))[0];
 
-		if (!this.hasMoved)
+		if (!this.hasMoved && !this.isUnderCheck)
 		{
-			if (rook1 != null && !rook1.hasMoved)
+			if (rook1 != null && !rook1.piece.hasMoved)
 			{
 				if (parentTile.position.x == 4)
 				{
-					if (checkPath(parentTile.position, -1, 1))
+					if (checkPath(parentTile.position, -1, 1) && checkCheckOnPath(BoardHandler.getTilesinCastlePath(parentTile, rook1)))
 					{
 						System.out.println("KING SIDE P1");
 						kingSideCastle = true;
@@ -129,7 +125,7 @@ public class King extends Piece
 				}
 				else if (parentTile.position.x == 5)
 				{
-					if (checkPath(parentTile.position, -1, 1))
+					if (checkPath(parentTile.position, -1, 1) && checkCheckOnPath(BoardHandler.getTilesinCastlePath(parentTile, rook1)))
 					{
 						System.out.println("QUEEN SIDE P1");
 						queenSideCastle = true;
@@ -137,11 +133,11 @@ public class King extends Piece
 				}
 			}
 
-			if (rook2 != null && !rook2.hasMoved)
+			if (rook2 != null && !rook2.piece.hasMoved)
 			{
 				if (parentTile.position.x == 4)
 				{
-					if (checkPath(parentTile.position, 1, 8))
+					if (checkPath(parentTile.position, 1, 8) && checkCheckOnPath(BoardHandler.getTilesinCastlePath(parentTile, rook2)))
 					{
 						System.out.println("QUEEN SIDE P2");
 						queenSideCastle = true;
@@ -149,7 +145,7 @@ public class King extends Piece
 				}
 				else if (parentTile.position.x == 5)
 				{
-					if (checkPath(parentTile.position, 1, 8))
+					if (checkPath(parentTile.position, 1, 8) && checkCheckOnPath(BoardHandler.getTilesinCastlePath(parentTile, rook2)))
 					{
 						System.out.println("KING SIDE P2");
 						kingSideCastle = true;
@@ -171,17 +167,30 @@ public class King extends Piece
 		return true;
 	}
 	
-	public void setCheck(Tile[] tiles) 
+	private boolean checkCheckOnPath(Tile[] tiles) 
 	{
-		isUnderCheck = detectCheck(tiles);
+		for (Tile tile : tiles)
+		{
+			if(detectCheck(tile.position))
+				return false;
+		}
+		return true;
+	}
+	
+	public void setCheck() 
+	{
+		isUnderCheck = detectCheck(this);
 		System.out.println("Check: " + isUnderCheck + ", Color: " + this.pieceColor);
 	}
 	
-	private boolean detectCheck(Tile[] tiles)
-	{		
+	public <T> boolean detectCheck(T tile)
+	{
+		Tile[] tiles = BoardHandler.getBoardAsTiles(ChessGUI.board);
+		Tile selectedTile = BoardHandler.getTiles(tile)[0];
+		
 		for (Tile t : tiles)
 		{
-			if(t.piece != null && t.piece.isValidMove(t, BoardHandler.getTiles(this)[0]))
+			if(t.piece != null && t.piece.getColor() != this.getColor() && t.piece.isValidMove(t, selectedTile))
 				return true;
 		}
 		

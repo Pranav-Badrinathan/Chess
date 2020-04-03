@@ -79,10 +79,21 @@ public abstract class Piece
 	{
 		return new JLabel(new ImageIcon(img));
 	}
+	
+	/**
+	 * This method is called when a {@link Piece} is added to the board
+	 * 
+	 * @param parentTile
+	 */
+	public void initialize(Tile parentTile)
+	{
+	}
 
 	/**
 	 * This method is called when a player chooses a {@link Tile} with a
 	 * {@link Piece} on it
+	 * 
+	 * @param parentTile
 	 */
 	public void onSelect(Tile parentTile)
 	{

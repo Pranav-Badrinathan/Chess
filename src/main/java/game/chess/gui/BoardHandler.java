@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import game.chess.enums.ChessColor;
 import game.chess.enums.PieceType;
 import game.chess.pieces.Bishop;
+import game.chess.pieces.Ghost;
 import game.chess.pieces.King;
 import game.chess.pieces.Knight;
 import game.chess.pieces.Pawn;
@@ -40,11 +41,14 @@ public class BoardHandler
 	}
 
 	/**
-	 * Returns a {@link Tile} whose position matches the given position
+	 * Returns a {@link Tile} whose [T] (position, piece, index or PieceType) matches the 
+	 * given [T]
 	 * 
-	 * @param pos
+	 * @param filter
 	 * @return a {@link Tile} object
 	 * @see Vector2
+	 * @see Piece
+	 * @see PieceType
 	 * @author Pranav Badrinathan
 	 */
 	public static <T> Tile[] getTiles(T filter)
@@ -198,6 +202,7 @@ public class BoardHandler
 				tiles[i].piece = new Pawn(opponentColor);
 
 			tiles[i].drawPieceSprite();
+			tiles[i].piece.initialize(tiles[i]);
 		}
 
 		// Add all the pieces to be used by the player
@@ -233,6 +238,7 @@ public class BoardHandler
 				tiles[63 - i].piece = new Pawn(playerColor);
 
 			tiles[63 - i].drawPieceSprite();
+			tiles[63 - i].piece.initialize(tiles[63 - i]);
 		}
 	}
 
@@ -255,7 +261,7 @@ public class BoardHandler
 				int y = e.getY();
 
 				for (int i = 0; i < tiles.length; i++)
-				{
+				{	
 					Rectangle tile = tiles[i].getBounds();
 					if (tile.x + tile.width > x && tile.x < x && tile.y + tile.height > y && tile.y < y)
 					{
@@ -313,8 +319,9 @@ public class BoardHandler
 			
 			from = -1;
 			to = -1;
+			
+			killAllGhosts();
 		}
-
 	}
 
 	/**
@@ -405,5 +412,21 @@ public class BoardHandler
 			tilesInBetween.add(getTiles(new Vector2(xPos, kingTile.position.y))[0]);
 		}
 		return tilesInBetween.toArray(new Tile[tilesInBetween.size()]);
+	}
+	
+	private static void killAllGhosts() 
+	{
+		for ( Tile tile : getBoardAsTiles(ChessGUI.board))
+		{
+			if(tile.piece instanceof Ghost)
+			{
+				Ghost g = (Ghost) tile.piece;
+				
+				if(g.newGhost)
+					g.newGhost = false;
+				else
+					tile.piece = null;
+			}
+		}
 	}
 }

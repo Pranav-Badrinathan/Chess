@@ -57,7 +57,7 @@ public class Tile extends JPanel
 		
 		if (piece != null)
 		{
-			Image sprite = SpriteRef.blackPawn.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+			Image sprite = null;
 			switch (piece.getColor())
 			{
 				case BLACK:
@@ -81,6 +81,8 @@ public class Tile extends JPanel
 							break;
 						case BISHOP:
 							sprite = SpriteRef.blackBishop.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+							break;
+						default:
 							break;
 					}
 					
@@ -108,6 +110,8 @@ public class Tile extends JPanel
 							break;
 						case BISHOP:
 							sprite = SpriteRef.whiteBishop.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+							break;
+						default:
 							break;
 					}
 					

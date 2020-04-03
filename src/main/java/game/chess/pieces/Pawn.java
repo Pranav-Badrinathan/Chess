@@ -5,12 +5,13 @@ import javax.swing.JOptionPane;
 import game.chess.enums.ChessColor;
 import game.chess.enums.PieceType;
 import game.chess.gui.BoardHandler;
-import game.chess.gui.ChessGUI;
 import game.chess.gui.Tile;
 import game.chess.util.Vector2;
 
 public class Pawn extends Piece
 {
+	private int dir = 0;
+
 	/**
 	 * A child-class of {@link Piece}, and one of the pieces in the game of chess
 	 * 
@@ -22,69 +23,69 @@ public class Pawn extends Piece
 	}
 
 	@Override
+	public void initialize(Tile parentTile)
+	{
+		if (BoardHandler.getTiles(new Vector2(parentTile.position.x, parentTile.position.y - 1))[0].piece == null
+				&& BoardHandler
+						.getTiles(new Vector2(parentTile.position.x, parentTile.position.y + 1))[0].piece != null)
+			dir = -1;
+		else
+			dir = 1;
+
+		System.out.println(this.getColor() + " : " + dir);
+	}
+
+	@Override
 	public boolean isValidMove(Tile currentTile, Tile targetTile)
 	{
 		if (super.isValidMove(currentTile, targetTile))
 		{
 			int steps = Math.abs(currentTile.position.y - targetTile.position.y);
 			Vector2 tempPos = currentTile.position;
-			int dir = 0;
 
-			if (pieceColor == ChessGUI.player.color)
+			if ((targetTile.position.x == currentTile.position.x - 1
+					|| targetTile.position.x == currentTile.position.x + 1)
+					&& (targetTile.position.y == currentTile.position.y + dir))
 			{
-				dir = -1;
-
-				if ((targetTile.position.x == currentTile.position.x - 1
-						|| targetTile.position.x == currentTile.position.x + 1)
-						&& (targetTile.position.y == currentTile.position.y - 1))
+				if (targetTile.piece != null)
 				{
-					if (targetTile.piece != null)
-						return true;
-				}
-
-				if (!this.hasMoved)
-				{
-					if (!(currentTile.position.x == targetTile.position.x
-							&& (targetTile.position.y == currentTile.position.y - 1
-									|| targetTile.position.y == currentTile.position.y - 2)))
+					if(targetTile.piece instanceof Ghost)
 					{
-						return false;
+						Ghost piece = (Ghost) targetTile.piece;
+						piece.killParentPiece();
 					}
-				} else
-				{
-					if (!(currentTile.position.x == targetTile.position.x
-							&& targetTile.position.y == currentTile.position.y - 1))
-					{
-						return false;
-					}
+					
+					return true;
 				}
-			} else if (pieceColor == ChessGUI.opponent.color)
+			}
+
+			if (!this.hasMoved)
 			{
-				dir = 1;
-
-				if ((targetTile.position.x == currentTile.position.x - 1
-						|| targetTile.position.x == currentTile.position.x + 1)
-						&& (targetTile.position.y == currentTile.position.y + 1))
+				if (!(currentTile.position.x == targetTile.position.x
+						&& (targetTile.position.y == currentTile.position.y + dir
+								|| targetTile.position.y == currentTile.position.y + (dir * 2))))
 				{
-					if (targetTile.piece != null)
-						return true;
+					return false;
+				}
+				else if (targetTile.position.y == currentTile.position.y + (dir * 2))
+				{
+					Tile midTile = BoardHandler
+							.getTiles(new Vector2(currentTile.position.x, currentTile.position.y + dir))[0];
+					
+					if(midTile.piece == null)
+					{
+						midTile.piece = new Ghost(this.type, this.pieceColor, this);
+						System.out.println("GHOST MADE!!" + " " + midTile.position.x + " ," + midTile.position.y);
+					}
 				}
 
-				if (!this.hasMoved)
+			}
+			else
+			{
+				if (!(currentTile.position.x == targetTile.position.x
+						&& targetTile.position.y == currentTile.position.y + dir))
 				{
-					if (!(currentTile.position.x == targetTile.position.x
-							&& (targetTile.position.y == currentTile.position.y + 1
-									|| targetTile.position.y == currentTile.position.y + 2)))
-					{
-						return false;
-					}
-				} else
-				{
-					if (!(currentTile.position.x == targetTile.position.x
-							&& targetTile.position.y == currentTile.position.y + 1))
-					{
-						return false;
-					}
+					return false;
 				}
 			}
 
@@ -99,7 +100,7 @@ public class Pawn extends Piece
 
 				Tile t = BoardHandler.getTiles(tempPos)[0];
 
-				if (t.piece != null)
+				if (t.piece != null && !(t.piece instanceof Ghost))
 					return false;
 			}
 

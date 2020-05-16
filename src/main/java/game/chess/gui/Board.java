@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 
 import javax.swing.JPanel;
 
+import game.chess.enums.ChessColor;
 import game.chess.util.Reference;
 
 /**
@@ -18,6 +19,8 @@ public class Board extends JPanel
 {
 	GridLayout chessBoard = new GridLayout(8, 8);
 
+	public ChessColor currentPlayer = ChessColor.WHITE;
+	
 	/**
 	 * Creates a new instance of the {@link Board} class
 	 */

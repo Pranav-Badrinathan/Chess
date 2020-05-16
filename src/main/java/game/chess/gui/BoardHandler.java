@@ -41,8 +41,8 @@ public class BoardHandler
 	}
 
 	/**
-	 * Returns a {@link Tile} whose [T] (position, piece, index or PieceType) matches the 
-	 * given [T]
+	 * Returns a {@link Tile} whose [T] (position, piece, index or PieceType)
+	 * matches the given [T]
 	 * 
 	 * @param filter
 	 * @return a {@link Tile} object
@@ -261,7 +261,7 @@ public class BoardHandler
 				int y = e.getY();
 
 				for (int i = 0; i < tiles.length; i++)
-				{	
+				{
 					Rectangle tile = tiles[i].getBounds();
 					if (tile.x + tile.width > x && tile.x < x && tile.y + tile.height > y && tile.y < y)
 					{
@@ -285,6 +285,11 @@ public class BoardHandler
 
 		if (from == -1 && selectedTile.piece != null)
 		{
+			if (board.currentPlayer == selectedTile.piece.getColor())
+				board.currentPlayer = getOtherColor(board.currentPlayer);
+			else
+				return;
+
 			selectedTile.piece.onSelect(selectedTile);
 			from = index;
 		}
@@ -316,10 +321,10 @@ public class BoardHandler
 					System.out.println("ILLEGAL MOVE!");
 				}
 			}
-			
+
 			from = -1;
 			to = -1;
-			
+
 			killAllGhosts();
 		}
 	}
@@ -336,12 +341,15 @@ public class BoardHandler
 	public static void movePiece(int fromTileIndex, int toTileIndex, Board board)
 	{
 		Component[] comps = board.getComponents();
-		
+
 		Tile toTile = (Tile) comps[toTileIndex];
 		Tile fromTile = (Tile) comps[fromTileIndex];
 
 		if (!fromTile.piece.isValidMove(fromTile, toTile))
+		{
+			board.currentPlayer = getOtherColor(board.currentPlayer);
 			return;
+		}
 
 		toTile.piece = fromTile.piece;
 		fromTile.piece = null;
@@ -382,7 +390,8 @@ public class BoardHandler
 	}
 
 	/**
-	 * Set's the {@link King} piece's {@code isUnderCheck} variable based on the current board
+	 * Set's the {@link King} piece's {@code isUnderCheck} variable based on the
+	 * current board
 	 * 
 	 * @author Pranav Badrinathan
 	 * @param board
@@ -398,14 +407,13 @@ public class BoardHandler
 		no2.setCheck();
 	}
 
-	
-	public static Tile[] getTilesinCastlePath(Tile kingTile, Tile rookTile) 
+	public static Tile[] getTilesinCastlePath(Tile kingTile, Tile rookTile)
 	{
 		ArrayList<Tile> tilesInBetween = new ArrayList<Tile>();
 		Vector2 dir = Vector2.direction(kingTile.position, rookTile.position);
-		
+
 		int xPos = kingTile.position.x;
-		
+
 		for (int i = 0; i < 2; i++)
 		{
 			xPos += dir.x;
@@ -413,20 +421,28 @@ public class BoardHandler
 		}
 		return tilesInBetween.toArray(new Tile[tilesInBetween.size()]);
 	}
-	
-	private static void killAllGhosts() 
+
+	private static void killAllGhosts()
 	{
-		for ( Tile tile : getBoardAsTiles(ChessGUI.board))
+		for (Tile tile : getBoardAsTiles(ChessGUI.board))
 		{
-			if(tile.piece instanceof Ghost)
+			if (tile.piece instanceof Ghost)
 			{
 				Ghost g = (Ghost) tile.piece;
-				
-				if(g.newGhost)
+
+				if (g.newGhost)
 					g.newGhost = false;
 				else
 					tile.piece = null;
 			}
 		}
+	}
+
+	private static ChessColor getOtherColor(ChessColor color) 
+	{
+		if(color == ChessColor.WHITE)
+			return ChessColor.BLACK;
+		else
+			return ChessColor.WHITE;
 	}
 }

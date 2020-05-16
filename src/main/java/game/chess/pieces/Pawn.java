@@ -55,6 +55,7 @@ public class Pawn extends Piece
 						piece.killParentPiece();
 					}
 					
+					this.hasMoved = true;
 					return true;
 				}
 			}

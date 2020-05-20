@@ -27,7 +27,7 @@ public class BoardHandler
 {
 	private static int to = -1;
 	private static int from = -1;
-
+	
 	/**
 	 * Initializes the Board
 	 * 
@@ -285,9 +285,7 @@ public class BoardHandler
 
 		if (from == -1 && selectedTile.piece != null)
 		{
-			if (board.currentPlayer == selectedTile.piece.getColor())
-				board.currentPlayer = getOtherColor(board.currentPlayer);
-			else
+			if (!(board.currentPlayer == selectedTile.piece.getColor()))
 				return;
 
 			selectedTile.piece.onSelect(selectedTile);
@@ -346,10 +344,8 @@ public class BoardHandler
 		Tile fromTile = (Tile) comps[fromTileIndex];
 
 		if (!fromTile.piece.isValidMove(fromTile, toTile))
-		{
-			board.currentPlayer = getOtherColor(board.currentPlayer);
 			return;
-		}
+
 
 		toTile.piece = fromTile.piece;
 		fromTile.piece = null;
@@ -363,6 +359,8 @@ public class BoardHandler
 		board.revalidate();
 		board.repaint();
 		setChecks(board);
+		
+		board.currentPlayer = getOtherColor(board.currentPlayer);
 	}
 
 	/**

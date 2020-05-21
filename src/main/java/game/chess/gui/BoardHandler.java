@@ -2,7 +2,6 @@ package game.chess.gui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ import game.chess.pieces.Piece;
 import game.chess.pieces.Queen;
 import game.chess.pieces.Rook;
 import game.chess.util.Reference;
+import game.chess.util.UsefulMethods;
 import game.chess.util.Vector2;
 
 public class BoardHandler
@@ -37,7 +37,7 @@ public class BoardHandler
 	{
 		addTiles(board);
 		initPieces(ChessGUI.player.color, ChessGUI.opponent.color, board);
-		mouseClickHandler(board);
+		mouseHandler(board);
 	}
 
 	/**
@@ -174,7 +174,7 @@ public class BoardHandler
 		{
 			if (i <= 7)
 			{
-				switch (Reference.piecePositions[i])
+				switch (Reference.PIECE_POSITIONS[i])
 				{
 					case "rook":
 						tiles[i].piece = new Rook(opponentColor);
@@ -210,7 +210,7 @@ public class BoardHandler
 		{
 			if (i <= 7)
 			{
-				switch (Reference.piecePositions[i])
+				switch (Reference.PIECE_POSITIONS[i])
 				{
 					case "rook":
 						tiles[63 - i].piece = new Rook(playerColor);
@@ -249,27 +249,49 @@ public class BoardHandler
 	 * @param board
 	 * @author Pranav Badrinathan
 	 */
-	private static void mouseClickHandler(Board board)
+	private static void mouseHandler(Board board)
 	{
 		Tile[] tiles = getBoardAsTiles(board);
 
-		board.addMouseListener(new MouseAdapter()
+		for (int i = 0; i < tiles.length; i++)
 		{
-			public void mousePressed(MouseEvent e)
+			int j = i;
+			tiles[i].addMouseListener(new MouseAdapter()
 			{
-				int x = e.getX();
-				int y = e.getY();
-
-				for (int i = 0; i < tiles.length; i++)
+				public void mouseClicked(MouseEvent e)
 				{
-					Rectangle tile = tiles[i].getBounds();
-					if (tile.x + tile.width > x && tile.x < x && tile.y + tile.height > y && tile.y < y)
-					{
-						selectTiles(tiles[i], i, board, false);
-					}
+					selectTiles(tiles[j], j, board, false);					
 				}
-			}
-		});
+				
+				public void mouseEntered(MouseEvent e) 
+				{
+					tiles[j].setBackground(UsefulMethods.blend(tiles[j].getBackground(), Reference.hoverColor));
+				}
+				
+				public void mouseExited(MouseEvent e) 
+				{
+					tiles[j].resetBackgroundColor();
+				}
+			});
+		}
+		
+//		board.addMouseListener(new MouseAdapter()
+//		{
+//			public void mousePressed(MouseEvent e)
+//			{
+//				int x = e.getX();
+//				int y = e.getY();
+//
+//				for (int i = 0; i < tiles.length; i++)
+//				{
+//					Rectangle tile = tiles[i].getBounds();
+//					if (tile.x + tile.width > x && tile.x < x && tile.y + tile.height > y && tile.y < y)
+//					{
+//						selectTiles(tiles[i], i, board, false);
+//					}
+//				}
+//			}
+//		});
 	}
 
 	/**
@@ -343,9 +365,12 @@ public class BoardHandler
 		Tile toTile = (Tile) comps[toTileIndex];
 		Tile fromTile = (Tile) comps[fromTileIndex];
 
+		//The Tile is no longer selected as it has been de-selected because of a (in)valid move
+		fromTile.isSelected = false;
+		fromTile.resetBackgroundColor();
+		
 		if (!fromTile.piece.isValidMove(fromTile, toTile))
 			return;
-
 
 		toTile.piece = fromTile.piece;
 		fromTile.piece = null;
@@ -405,6 +430,15 @@ public class BoardHandler
 		no2.setCheck();
 	}
 
+	/**
+	 * This method returns all the tiles between a rook and a king. It is designed to be used for checking if
+	 * any pieces are in-between the king and the rook, thus voiding attempts to castle, though this check is
+	 * done in the {@link King} class
+	 * 
+	 * @param kingTile
+	 * @param rookTile
+	 * @return the tiles between a rook and the king
+	 */
 	public static Tile[] getTilesinCastlePath(Tile kingTile, Tile rookTile)
 	{
 		ArrayList<Tile> tilesInBetween = new ArrayList<Tile>();
@@ -420,6 +454,9 @@ public class BoardHandler
 		return tilesInBetween.toArray(new Tile[tilesInBetween.size()]);
 	}
 
+	/**
+	 * This method is used to delete all the {@link Ghost} pieces on the board after a single round. 
+	 */
 	private static void killAllGhosts()
 	{
 		for (Tile tile : getBoardAsTiles(ChessGUI.board))

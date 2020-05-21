@@ -27,6 +27,6 @@ public class Board extends JPanel
 	public Board()
 	{
 		this.setLayout(chessBoard);
-		this.setPreferredSize(Reference.boardDimention);
+		this.setPreferredSize(Reference.BOARD_DIMENTIONS);
 	}
 }

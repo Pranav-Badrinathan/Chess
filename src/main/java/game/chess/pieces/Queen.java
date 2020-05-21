@@ -4,10 +4,15 @@ import game.chess.enums.ChessColor;
 import game.chess.enums.PieceType;
 import game.chess.gui.Tile;
 
+/**
+ * A child-class of {@link Piece}, and one of the pieces in the game of chess
+ * 
+ * @param pieceColor
+ */
 public class Queen extends Piece
 {
 	/**
-	 * A child-class of {@link Piece}, and one of the pieces in the game of chess
+	 * Creates an instance of the {@link Queen} piece
 	 * 
 	 * @param pieceColor
 	 */

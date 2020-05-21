@@ -8,6 +8,8 @@ import javax.swing.JLabel;
 import game.chess.enums.ChessColor;
 import game.chess.enums.PieceType;
 import game.chess.gui.Tile;
+import game.chess.util.Reference;
+import game.chess.util.UsefulMethods;
 
 /**
  * Abstract super class that is inherited by all the individual piece classes
@@ -97,5 +99,7 @@ public abstract class Piece
 	 */
 	public void onSelect(Tile parentTile)
 	{
+		parentTile.setBackground(UsefulMethods.blend(parentTile.getBackground(), Reference.selectColor));
+		parentTile.isSelected = true;
 	}
 }

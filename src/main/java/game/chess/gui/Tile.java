@@ -10,6 +10,7 @@ import game.chess.enums.ChessColor;
 import game.chess.pieces.Piece;
 import game.chess.util.Reference;
 import game.chess.util.SpriteRef;
+import game.chess.util.UsefulMethods;
 import game.chess.util.Vector2;
 
 /**
@@ -27,6 +28,8 @@ public class Tile extends JPanel
 
 	public Piece piece = null;
 
+	public boolean isSelected;
+	
 	public int index;
 	
 	/**
@@ -52,8 +55,8 @@ public class Tile extends JPanel
 	 */
 	public void drawPieceSprite()
 	{
-		int width = Reference.pieceSpriteDimention.width;
-		int height = Reference.pieceSpriteDimention.height;
+		int width = Reference.PIECE_SPRITE_DIMENTIONS.width;
+		int height = Reference.PIECE_SPRITE_DIMENTIONS.height;
 		
 		if (piece != null)
 		{
@@ -137,5 +140,16 @@ public class Tile extends JPanel
 	public ChessColor getTileColor()
 	{
 		return tileColor;
+	}
+	
+	public void resetBackgroundColor() 
+	{	
+		if(this.tileColor == ChessColor.BLACK)
+			this.setBackground(Color.GRAY);
+		else
+			this.setBackground(Color.WHITE);
+		
+		if(isSelected)
+			this.setBackground(UsefulMethods.blend(this.getBackground(), Reference.selectColor));
 	}
 }

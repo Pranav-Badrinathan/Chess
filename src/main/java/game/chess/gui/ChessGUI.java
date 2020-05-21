@@ -36,7 +36,7 @@ public class ChessGUI extends JFrame
 		frame.setResizable(false);
 	
 		//Set stuff that JPanel needs
-		background.setPreferredSize(Reference.appDimention);
+		background.setPreferredSize(Reference.APP_DIMENTIONS);
 		
 		frame.getContentPane().add(background);
 		frame.pack();

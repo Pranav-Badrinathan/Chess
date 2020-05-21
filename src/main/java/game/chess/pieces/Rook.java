@@ -6,10 +6,15 @@ import game.chess.gui.BoardHandler;
 import game.chess.gui.Tile;
 import game.chess.util.Vector2;
 
+/**
+ * A child-class of {@link Piece}, and one of the pieces in the game of chess
+ * 
+ * @param pieceColor
+ */
 public class Rook extends Piece
 {
 	/**
-	 * A child-class of {@link Piece}, and one of the pieces in the game of chess
+	 * Creates an instance of the {@link Rook} piece
 	 * 
 	 * @param pieceColor
 	 */

@@ -8,12 +8,17 @@ import game.chess.gui.BoardHandler;
 import game.chess.gui.Tile;
 import game.chess.util.Vector2;
 
+/**
+ * A child-class of {@link Piece}, and one of the pieces in the game of chess
+ * 
+ * @param pieceColor
+ */
 public class Pawn extends Piece
 {
 	private int dir = 0;
 
 	/**
-	 * A child-class of {@link Piece}, and one of the pieces in the game of chess
+	 * Creates an instance of the {@link Pawn} piece
 	 * 
 	 * @param pieceColor
 	 */
@@ -31,8 +36,6 @@ public class Pawn extends Piece
 			dir = -1;
 		else
 			dir = 1;
-
-		System.out.println(this.getColor() + " : " + dir);
 	}
 
 	@Override

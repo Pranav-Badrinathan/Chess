@@ -7,6 +7,11 @@ import game.chess.gui.ChessGUI;
 import game.chess.gui.Tile;
 import game.chess.util.Vector2;
 
+/**
+ * A child-class of {@link Piece}, and one of the pieces in the game of chess
+ * 
+ * @param pieceColor
+ */
 public class King extends Piece
 {
 	private boolean kingSideCastle;
@@ -17,6 +22,11 @@ public class King extends Piece
 	private Tile rook1;
 	private Tile rook2;
 
+	/**
+	 * Creates an instance of the {@link King} piece
+	 * 
+	 * @param pieceColor
+	 */
 	public King(ChessColor pieceColor)
 	{
 		super(PieceType.KING, pieceColor);

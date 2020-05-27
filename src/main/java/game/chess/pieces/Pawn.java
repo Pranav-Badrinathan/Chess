@@ -78,7 +78,7 @@ public class Pawn extends Piece
 					
 					if(midTile.piece == null)
 					{
-						midTile.piece = new Ghost(this.type, this.pieceColor, this);
+						midTile.piece = new Ghost(this);
 						System.out.println("GHOST MADE!!" + " " + midTile.position.x + " ," + midTile.position.y);
 					}
 				}

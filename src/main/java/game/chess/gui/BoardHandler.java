@@ -274,24 +274,6 @@ public class BoardHandler
 				}
 			});
 		}
-		
-//		board.addMouseListener(new MouseAdapter()
-//		{
-//			public void mousePressed(MouseEvent e)
-//			{
-//				int x = e.getX();
-//				int y = e.getY();
-//
-//				for (int i = 0; i < tiles.length; i++)
-//				{
-//					Rectangle tile = tiles[i].getBounds();
-//					if (tile.x + tile.width > x && tile.x < x && tile.y + tile.height > y && tile.y < y)
-//					{
-//						selectTiles(tiles[i], i, board, false);
-//					}
-//				}
-//			}
-//		});
 	}
 
 	/**
@@ -318,7 +300,7 @@ public class BoardHandler
 			to = index;
 			Tile fromTile = (Tile) comps[to];
 
-			movePiece(from, to, board);
+			movePiece(from, to, board, true);
 
 			Tile[] kings = getTiles(PieceType.KING);
 
@@ -329,23 +311,23 @@ public class BoardHandler
 			{
 				if (king1.isUnderCheck)
 				{
-					movePiece(to, from, board);
+					movePiece(to, from, board, false);
 					System.out.println("ILLEGAL MOVE!");
+					
+					
 				}
 			}
 			else if (fromTile.piece != null && king2.getColor() == fromTile.piece.getColor())
 			{
 				if (king2.isUnderCheck)
 				{
-					movePiece(to, from, board);
+					movePiece(to, from, board, false);
 					System.out.println("ILLEGAL MOVE!");
 				}
 			}
 
 			from = -1;
 			to = -1;
-
-			killAllGhosts();
 		}
 	}
 
@@ -358,20 +340,20 @@ public class BoardHandler
 	 * @param toTileIndex
 	 * @param board
 	 */
-	public static void movePiece(int fromTileIndex, int toTileIndex, Board board)
+	public static void movePiece(int fromTileIndex, int toTileIndex, Board board, boolean validate)
 	{
-		Component[] comps = board.getComponents();
+		Tile[] comps = getBoardAsTiles(board);
 
-		Tile toTile = (Tile) comps[toTileIndex];
-		Tile fromTile = (Tile) comps[fromTileIndex];
+		Tile toTile = comps[toTileIndex];
+		Tile fromTile = comps[fromTileIndex];
 
 		//The Tile is no longer selected as it has been de-selected because of a (in)valid move
 		fromTile.isSelected = false;
 		fromTile.resetBackgroundColor();
 		
-		if (!fromTile.piece.isValidMove(fromTile, toTile))
+		if (validate && !fromTile.piece.isValidMove(fromTile, toTile))
 			return;
-
+		
 		toTile.piece = fromTile.piece;
 		fromTile.piece = null;
 
@@ -386,8 +368,9 @@ public class BoardHandler
 		setChecks(board);
 		
 		board.currentPlayer = getOtherColor(board.currentPlayer);
+		killAllGhosts();
 	}
-
+	
 	/**
 	 * This method first checks if the {@link Tile} {@code toTile}'s piece is a
 	 * {@link Pawn}. If it is, then it checks if it is in the correct position for

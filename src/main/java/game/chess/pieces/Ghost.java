@@ -1,7 +1,5 @@
 package game.chess.pieces;
 
-import game.chess.enums.ChessColor;
-import game.chess.enums.PieceType;
 import game.chess.gui.BoardHandler;
 import game.chess.gui.Tile;
 
@@ -24,9 +22,9 @@ public class Ghost extends Piece
 	 * 
 	 * @param pieceColor
 	 */
-	public Ghost(PieceType type, ChessColor pieceColor, Piece parent)
+	public Ghost(Piece parent)
 	{
-		super(type, pieceColor);
+		super(parent.type, parent.pieceColor);
 		this.parent = parent;
 	}
 	

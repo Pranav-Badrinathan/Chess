@@ -21,8 +21,8 @@ public final class Reference
 	public static final Dimension BOARD_DIMENTIONS = new Dimension(500, 500);
 	public static final Dimension PIECE_SPRITE_DIMENTIONS = new Dimension(62, 62);
 
-	public static final String BLACK_PIECES_URL = "bin/assets/textures/black/";
-	public static final String WHITE_PIECES_URL = "bin/assets/textures/white/";
+	public static final String BLACK_PIECES_URL = "/assets/textures/black/";
+	public static final String WHITE_PIECES_URL = "/assets/textures/white/";
 
 	public static final String[] PIECE_POSITIONS = { "rook", "knight", "bishop", "k/q", "k/q", "bishop", "knight",
 			"rook" };

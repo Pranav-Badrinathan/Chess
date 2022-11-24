@@ -1,10 +1,11 @@
 package game.chess.util;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
+import game.chess.Main;
 import game.chess.gui.Tile;
 
 /**
@@ -33,24 +34,30 @@ public final class SpriteRef
 		try
 		{
 			//Initialize all black pieces' images
-			blackBishop = ImageIO.read(new File(Reference.BLACK_PIECES_URL + "Black Bishop.png"));
-			blackKing = ImageIO.read(new File(Reference.BLACK_PIECES_URL + "Black King.png"));
-			blackKnight = ImageIO.read(new File(Reference.BLACK_PIECES_URL + "Black Knight.png"));
-			blackPawn = ImageIO.read(new File(Reference.BLACK_PIECES_URL + "Black Pawn.png"));
-			blackQueen = ImageIO.read(new File(Reference.BLACK_PIECES_URL + "Black Queen.png"));
-			blackRook = ImageIO.read(new File(Reference.BLACK_PIECES_URL + "Black Rook.png"));
+			System.out.println(Main.class.getResource(Reference.BLACK_PIECES_URL + "Black Bishop.png"));
+			blackBishop = ImageIO.read(getStream(Reference.BLACK_PIECES_URL + "Black Bishop.png"));
+			blackKing = ImageIO.read(getStream(Reference.BLACK_PIECES_URL + "Black King.png"));
+			blackKnight = ImageIO.read(getStream(Reference.BLACK_PIECES_URL + "Black Knight.png"));
+			blackPawn = ImageIO.read(getStream(Reference.BLACK_PIECES_URL + "Black Pawn.png"));
+			blackQueen = ImageIO.read(getStream(Reference.BLACK_PIECES_URL + "Black Queen.png"));
+			blackRook = ImageIO.read(getStream(Reference.BLACK_PIECES_URL + "Black Rook.png"));
 			
 			//Initialize all white pieces' images
-			whiteBishop = ImageIO.read(new File(Reference.WHITE_PIECES_URL + "white Bishop.png"));
-			whiteKing = ImageIO.read(new File(Reference.WHITE_PIECES_URL + "white King.png"));
-			whiteKnight = ImageIO.read(new File(Reference.WHITE_PIECES_URL + "white Knight.png"));
-			whitePawn = ImageIO.read(new File(Reference.WHITE_PIECES_URL + "white Pawn.png"));
-			whiteQueen = ImageIO.read(new File(Reference.WHITE_PIECES_URL + "white Queen.png"));
-			whiteRook = ImageIO.read(new File(Reference.WHITE_PIECES_URL + "white Rook.png"));
+			whiteBishop = ImageIO.read(getStream(Reference.WHITE_PIECES_URL + "White Bishop.png"));
+			whiteKing = ImageIO.read(getStream(Reference.WHITE_PIECES_URL + "White King.png"));
+			whiteKnight = ImageIO.read(getStream(Reference.WHITE_PIECES_URL + "White Knight.png"));
+			whitePawn = ImageIO.read(getStream(Reference.WHITE_PIECES_URL + "White Pawn.png"));
+			whiteQueen = ImageIO.read(getStream(Reference.WHITE_PIECES_URL + "White Queen.png"));
+			whiteRook = ImageIO.read(getStream(Reference.WHITE_PIECES_URL + "White Rook.png"));
 		} 
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	private static InputStream getStream(String str)
+	{
+		return Main.class.getResourceAsStream(str);
 	}
 }

@@ -290,7 +290,7 @@ public class BoardHandler
 			to = index;
 			Tile fromTile = (Tile) comps[to];
 
-			movePiece(from, to, true);
+			movePiece(from, to, true, true);
 
 			Tile[] kings = getTiles(PieceType.KING);
 
@@ -301,7 +301,7 @@ public class BoardHandler
 			{
 				if (king1.isUnderCheck)
 				{
-					movePiece(to, from, false);
+					movePiece(to, from, false, true);
 					System.out.println("ILLEGAL MOVE!");
 					
 					
@@ -311,7 +311,7 @@ public class BoardHandler
 			{
 				if (king2.isUnderCheck)
 				{
-					movePiece(to, from, false);
+					movePiece(to, from, false, true);
 					System.out.println("ILLEGAL MOVE!");
 				}
 			}
@@ -330,7 +330,7 @@ public class BoardHandler
 	 * @param toTileIndex
 	 * @param board
 	 */
-	public static void movePiece(int fromTileIndex, int toTileIndex, boolean validate)
+	public static void movePiece(int fromTileIndex, int toTileIndex, boolean validate, boolean a)
 	{
 		Tile[] comps = getBoardAsTiles();
 
@@ -357,7 +357,7 @@ public class BoardHandler
 		board.repaint();
 		setChecks(board);
 		
-		board.currentPlayer = getOtherColor(board.currentPlayer);
+		if (a) board.currentPlayer = getOtherColor(board.currentPlayer);
 		killAllGhosts();
 	}
 	

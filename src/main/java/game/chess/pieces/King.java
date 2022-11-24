@@ -56,7 +56,7 @@ public class King extends Piece
 					{
 						Tile to = BoardHandler.getTiles(new Vector2(5, currentTile.position.y))[0];
 
-						BoardHandler.movePiece(rook2.index, to.index, true);
+						BoardHandler.movePiece(rook2.index, to.index, true, false);
 
 						this.hasMoved = true;
 						return true;
@@ -68,7 +68,7 @@ public class King extends Piece
 					{
 						Tile to = BoardHandler.getTiles(new Vector2(6, currentTile.position.y))[0];
 
-						BoardHandler.movePiece(rook2.index, to.index, true);
+						BoardHandler.movePiece(rook2.index, to.index, true, false);
 
 						this.hasMoved = true;
 						return true;
@@ -83,7 +83,7 @@ public class King extends Piece
 					{
 						Tile to = BoardHandler.getTiles(new Vector2(3, currentTile.position.y))[0];
 
-						BoardHandler.movePiece(rook1.index, to.index, true);
+						BoardHandler.movePiece(rook1.index, to.index, true, false);
 
 						this.hasMoved = true;
 						return true;
@@ -95,7 +95,7 @@ public class King extends Piece
 					{
 						Tile to = BoardHandler.getTiles(new Vector2(4, currentTile.position.y))[0];
 
-						BoardHandler.movePiece(rook1.index, to.index, true);
+						BoardHandler.movePiece(rook1.index, to.index, true, false);
 
 						this.hasMoved = true;
 						return true;

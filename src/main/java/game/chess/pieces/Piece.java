@@ -65,6 +65,7 @@ public abstract class Piece
 		if (currentTile.position == targetTile.position)
 			return false;
 
+		// Don't move if moving into a Tile with a friendly piece
 		if (targetTile.piece != null && this.pieceColor == targetTile.piece.pieceColor)
 			return false;
 

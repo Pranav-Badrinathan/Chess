@@ -13,16 +13,14 @@ public class ChessGUI extends JFrame
 {
 	private static final long serialVersionUID = 1L;
 	
-	public static JFrame frame = new JFrame("Chess");
-	public static JPanel background = new JPanel(new GridBagLayout());
-	public static Board board = new Board();
+	// Declare the main UI components
+	private static JFrame frame = new JFrame("Chess");
+	private static JPanel background = new JPanel(new GridBagLayout());
+	private static Board board = new Board();
 	
-	public static Player player = new Player("player", ChessColor.WHITE);	
-	public static Player opponent = new Player("opponent", ChessColor.BLACK);	
-	
-	public static int width;
-	public static int height;
-	
+	public static Player player1 = new Player("player", ChessColor.WHITE);	
+	public static Player player2 = new Player("opponent", ChessColor.BLACK);	
+		
 	/**
 	 * Creates the {@code JFrame} and adds the chess board, {@link Board}, to the frame.<br>
 	 * Initializes everything that follows.
@@ -42,7 +40,7 @@ public class ChessGUI extends JFrame
 		frame.pack();
 		
 		background.add(board);
-		BoardHandler.Initialize(board);
+		BoardHandler.init(board);
 		
 		//Set the location of the JFrame and set it visible
 		frame.setLocationRelativeTo(null);

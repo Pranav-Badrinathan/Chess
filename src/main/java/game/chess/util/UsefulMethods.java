@@ -4,6 +4,11 @@ import java.awt.Color;
 
 public class UsefulMethods
 {
+	/**
+	 * Probably just copied from somewhere, I don't remember writing this...
+	 * @param c
+	 * @return a blended Color
+	 */
 	public static Color blend(Color... c) {
 	    if (c == null || c.length <= 0) {
 	        return null;

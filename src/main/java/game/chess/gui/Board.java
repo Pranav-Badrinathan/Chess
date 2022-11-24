@@ -17,8 +17,10 @@ import game.chess.util.Reference;
 @SuppressWarnings("serial")
 public class Board extends JPanel
 {
-	GridLayout chessBoard = new GridLayout(8, 8);
+	// Declares the Grid that represents the spaces on the board.
+	private GridLayout chessBoard = new GridLayout(8, 8);
 
+	// IDK why this is here...
 	public ChessColor currentPlayer = ChessColor.WHITE;
 	
 	/**

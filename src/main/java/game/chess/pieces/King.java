@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import game.chess.enums.ChessColor;
 import game.chess.enums.PieceType;
 import game.chess.gui.BoardHandler;
-import game.chess.gui.ChessGUI;
 import game.chess.gui.Tile;
 import game.chess.util.Vector2;
 
@@ -57,7 +56,7 @@ public class King extends Piece
 					{
 						Tile to = BoardHandler.getTiles(new Vector2(5, currentTile.position.y))[0];
 
-						BoardHandler.movePiece(rook2.index, to.index, ChessGUI.board, true);
+						BoardHandler.movePiece(rook2.index, to.index, true);
 
 						this.hasMoved = true;
 						return true;
@@ -69,7 +68,7 @@ public class King extends Piece
 					{
 						Tile to = BoardHandler.getTiles(new Vector2(6, currentTile.position.y))[0];
 
-						BoardHandler.movePiece(rook2.index, to.index, ChessGUI.board, true);
+						BoardHandler.movePiece(rook2.index, to.index, true);
 
 						this.hasMoved = true;
 						return true;
@@ -84,7 +83,7 @@ public class King extends Piece
 					{
 						Tile to = BoardHandler.getTiles(new Vector2(3, currentTile.position.y))[0];
 
-						BoardHandler.movePiece(rook1.index, to.index, ChessGUI.board, true);
+						BoardHandler.movePiece(rook1.index, to.index, true);
 
 						this.hasMoved = true;
 						return true;
@@ -96,7 +95,7 @@ public class King extends Piece
 					{
 						Tile to = BoardHandler.getTiles(new Vector2(4, currentTile.position.y))[0];
 
-						BoardHandler.movePiece(rook1.index, to.index, ChessGUI.board, true);
+						BoardHandler.movePiece(rook1.index, to.index, true);
 
 						this.hasMoved = true;
 						return true;
@@ -209,7 +208,7 @@ public class King extends Piece
 
 	public <T> boolean detectCheck(T tile)
 	{
-		ArrayList<Tile> tiles = new ArrayList<>(Arrays.asList(BoardHandler.getBoardAsTiles(ChessGUI.board)));
+		ArrayList<Tile> tiles = new ArrayList<>(Arrays.asList(BoardHandler.getBoardAsTiles()));
 		Tile selectedTile = BoardHandler.getTiles(tile)[0];
 		
 		tiles = new ArrayList<>(tiles.stream().filter(x -> x.piece != null).collect(Collectors.toList()));;

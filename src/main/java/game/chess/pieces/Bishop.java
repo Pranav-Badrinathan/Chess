@@ -26,6 +26,7 @@ public class Bishop extends Piece
 	@Override
 	public boolean isValidMove(Tile currentTile, Tile targetTile)
 	{
+		// Don't kill your own pieces, and move into your current Tile.
 		if (!super.isValidMove(currentTile, targetTile))
 			return false;
 

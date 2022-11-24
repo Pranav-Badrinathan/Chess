@@ -18,7 +18,6 @@ import game.chess.util.Vector2;
  * 
  * @author Pranav Badrinathan
  */
-
 @SuppressWarnings("serial")
 public class Tile extends JPanel
 {
@@ -58,77 +57,77 @@ public class Tile extends JPanel
 		int width = Reference.PIECE_SPRITE_DIMENTIONS.width;
 		int height = Reference.PIECE_SPRITE_DIMENTIONS.height;
 		
-		if (piece != null)
-		{
-			Image sprite = null;
-			switch (piece.getColor())
-			{
-				case BLACK:
-				{
-					switch (piece.getType())
-					{
-						case PAWN:
-							sprite = SpriteRef.blackPawn.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-							break;
-						case KING:
-							sprite = SpriteRef.blackKing.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-							break;
-						case QUEEN:
-							sprite = SpriteRef.blackQueen.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-							break;
-						case KNIGHT:
-							sprite = SpriteRef.blackKnight.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-							break;
-						case ROOK:
-							sprite = SpriteRef.blackRook.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-							break;
-						case BISHOP:
-							sprite = SpriteRef.blackBishop.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-							break;
-						default:
-							break;
-					}
-					
-					break;
-				}
-
-				case WHITE:
-				{
-					switch (piece.getType())
-					{
-						case PAWN:
-							sprite = SpriteRef.whitePawn.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-							break;
-						case KING:
-							sprite = SpriteRef.whiteKing.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-							break;
-						case QUEEN:
-							sprite = SpriteRef.whiteQueen.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-							break;
-						case KNIGHT:
-							sprite = SpriteRef.whiteKnight.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-							break;
-						case ROOK:
-							sprite = SpriteRef.whiteRook.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-							break;
-						case BISHOP:
-							sprite = SpriteRef.whiteBishop.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-							break;
-						default:
-							break;
-					}
-					
-					break;
-				}	
-			}
-			this.removeAll();
-			this.add(piece.getSprite(sprite));
-		}
-		else 
+		// If the piece is null, kill it (by removing from components). Then return, not assigning sprite.
+		if (piece == null)
 		{
 			if(this.getComponentCount() != 0)
-			this.remove(getComponent(0));
+				this.remove(getComponent(0));
+			return;
 		}
+		
+		Image sprite = null;
+		switch (piece.getColor())
+		{
+			case BLACK:
+			{
+				switch (piece.getType())
+				{
+					case PAWN:
+						sprite = SpriteRef.blackPawn.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+						break;
+					case KING:
+						sprite = SpriteRef.blackKing.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+						break;
+					case QUEEN:
+						sprite = SpriteRef.blackQueen.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+						break;
+					case KNIGHT:
+						sprite = SpriteRef.blackKnight.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+						break;
+					case ROOK:
+						sprite = SpriteRef.blackRook.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+						break;
+					case BISHOP:
+						sprite = SpriteRef.blackBishop.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+						break;
+					default:
+						break;
+				}
+				
+				break;
+			}
+
+			case WHITE:
+			{
+				switch (piece.getType())
+				{
+					case PAWN:
+						sprite = SpriteRef.whitePawn.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+						break;
+					case KING:
+						sprite = SpriteRef.whiteKing.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+						break;
+					case QUEEN:
+						sprite = SpriteRef.whiteQueen.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+						break;
+					case KNIGHT:
+						sprite = SpriteRef.whiteKnight.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+						break;
+					case ROOK:
+						sprite = SpriteRef.whiteRook.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+						break;
+					case BISHOP:
+						sprite = SpriteRef.whiteBishop.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+						break;
+					default:
+						break;
+				}
+				
+				break;
+			}	
+		}
+		this.removeAll();
+		this.add(piece.getSprite(sprite));
 	}
 
 	/**
@@ -144,10 +143,7 @@ public class Tile extends JPanel
 	
 	public void resetBackgroundColor() 
 	{	
-		if(this.tileColor == ChessColor.BLACK)
-			this.setBackground(Color.GRAY);
-		else
-			this.setBackground(Color.WHITE);
+		this.setBackground((Color) Reference.visibleColor.get(tileColor));
 		
 		if(isSelected)
 			this.setBackground(UsefulMethods.blend(this.getBackground(), Reference.selectColor));

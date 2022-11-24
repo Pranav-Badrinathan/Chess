@@ -1,6 +1,5 @@
 package game.chess.gui;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -27,17 +26,18 @@ public class BoardHandler
 {
 	private static int to = -1;
 	private static int from = -1;
+	private static Board board;
 	
 	/**
 	 * Initializes the Board
 	 * 
 	 * @param board
 	 */
-	public static void Initialize(Board board)
+	public static void init(Board board)
 	{
-		addTiles(board);
-		initPieces(ChessGUI.player.color, ChessGUI.opponent.color, board);
-		mouseHandler(board);
+		BoardHandler.board = board;
+		addTiles();
+		initPieces(ChessGUI.player1.color, ChessGUI.player2.color);
 	}
 
 	/**
@@ -53,7 +53,9 @@ public class BoardHandler
 	 */
 	public static <T> Tile[] getTiles(T filter)
 	{
-		Tile[] tiles = getBoardAsTiles(ChessGUI.board);
+		Tile[] tiles = getBoardAsTiles();
+		
+		// Needs to be list, cause don't know the size of the list.
 		List<Tile> t = new ArrayList<Tile>();
 
 		if (filter instanceof Vector2)
@@ -93,23 +95,14 @@ public class BoardHandler
 	/**
 	 * Returns {@code board}'s child components as tiles
 	 * 
-	 * @param board
 	 * @return a {@link Tile}[]
 	 * @see Tile
 	 * @see Component
 	 * @author Pranav Badrinathan
 	 */
-	public static Tile[] getBoardAsTiles(Board board)
+	public static Tile[] getBoardAsTiles()
 	{
-		Component[] comps = board.getComponents();
-		Tile[] t = new Tile[comps.length];
-
-		for (int i = 0; i < comps.length; i++)
-		{
-			t[i] = (Tile) comps[i];
-		}
-
-		return t;
+		return Arrays.stream(board.getComponents()).toArray(Tile[]::new);
 	}
 
 	/**
@@ -118,10 +111,8 @@ public class BoardHandler
 	 * 
 	 * @param board
 	 */
-	private static void addTiles(Board board)
+	private static void addTiles()
 	{
-		// Black is represented by the false and White by true
-		boolean prvTileWasWhite = false;
 		int x = 1;
 		int y = 1;
 
@@ -129,11 +120,24 @@ public class BoardHandler
 		{
 			Tile toAdd;
 
-			if (prvTileWasWhite)
-				toAdd = new Tile(ChessColor.BLACK, Color.GRAY, new Vector2(x, y), i);
+			/*
+			 * Makes the pattern on the chess board, while adding in the Tiles. The way it works is: 'x'
+			 * 
+			 * represents the x position of the Tile and y represents the y position. 
+			 * 
+			 * 'x' remains the same for the tiles in the same column, while 'y' changes between
+			 * even and odd as you go further down the column. So doing (x+y) % 2 gives you
+			 * 1 and 0 Alternating. So, it can be used to color the tiles, as it alternates
+			 * like a chess board.
+			 */
+			if ((x + y) % 2 == 0)
+				toAdd = new Tile(ChessColor.WHITE, Reference.visibleColor.get(ChessColor.WHITE), new Vector2(x, y), i);
 			else
-				toAdd = new Tile(ChessColor.WHITE, Color.WHITE, new Vector2(x, y), i);
+				toAdd = new Tile(ChessColor.BLACK, Reference.visibleColor.get(ChessColor.BLACK), new Vector2(x, y), i);
 
+			// Mouse click listener, allows us to click tiles
+			mouseHandler(toAdd, i);
+			
 			// Setup the positions: if x is 8 then reset it to 1 and add 1 to y
 			x++;
 			if (x == 9)
@@ -143,14 +147,6 @@ public class BoardHandler
 			}
 
 			board.add(toAdd);
-
-			/*
-			 * This here makes sure to not change the color of the tile if it is at the end
-			 * of a horizontal line, as the last Tile in a line and first in the next line
-			 * are the same color.
-			 */
-			if (i != 7 && i != 15 && i != 23 && i != 31 && i != 39 && i != 47 && i != 55)
-				prvTileWasWhite = !prvTileWasWhite;
 		}
 	}
 
@@ -159,15 +155,15 @@ public class BoardHandler
 	 * player and opponent's {@link ChessColor} the player's {@link ChessColor}
 	 * pieces will be added to the bottom of the screen
 	 * 
-	 * @param playerColor
-	 * @param opponentColor
+	 * @param player1Color
+	 * @param player2Color
 	 * @param board
 	 * @author Pranav Badrinathan
 	 * @see PieceType
 	 */
-	private static void initPieces(ChessColor playerColor, ChessColor opponentColor, Board board)
+	private static void initPieces(ChessColor player1Color, ChessColor player2Color)
 	{
-		Tile[] tiles = getBoardAsTiles(board);
+		Tile[] tiles = getBoardAsTiles();
 
 		// Add all the pieces to be used by the opponent
 		for (int i = 0; i <= 15; i++)
@@ -177,20 +173,20 @@ public class BoardHandler
 				switch (Reference.PIECE_POSITIONS[i])
 				{
 					case "rook":
-						tiles[i].piece = new Rook(opponentColor);
+						tiles[i].piece = new Rook(player2Color);
 						break;
 					case "knight":
-						tiles[i].piece = new Knight(opponentColor);
+						tiles[i].piece = new Knight(player2Color);
 						break;
 					case "bishop":
-						tiles[i].piece = new Bishop(opponentColor);
+						tiles[i].piece = new Bishop(player2Color);
 						break;
 					case "k/q":
 					{
-						if (tiles[i].getTileColor() == opponentColor)
-							tiles[i].piece = new Queen(opponentColor);
+						if (tiles[i].getTileColor() == player2Color)
+							tiles[i].piece = new Queen(player2Color);
 						else
-							tiles[i].piece = new King(opponentColor);
+							tiles[i].piece = new King(player2Color);
 					}
 						break;
 
@@ -199,7 +195,7 @@ public class BoardHandler
 				}
 			}
 			else
-				tiles[i].piece = new Pawn(opponentColor);
+				tiles[i].piece = new Pawn(player2Color);
 
 			tiles[i].drawPieceSprite();
 			tiles[i].piece.initialize(tiles[i]);
@@ -213,20 +209,20 @@ public class BoardHandler
 				switch (Reference.PIECE_POSITIONS[i])
 				{
 					case "rook":
-						tiles[63 - i].piece = new Rook(playerColor);
+						tiles[63 - i].piece = new Rook(player1Color);
 						break;
 					case "knight":
-						tiles[63 - i].piece = new Knight(playerColor);
+						tiles[63 - i].piece = new Knight(player1Color);
 						break;
 					case "bishop":
-						tiles[63 - i].piece = new Bishop(playerColor);
+						tiles[63 - i].piece = new Bishop(player1Color);
 						break;
 					case "k/q":
 					{
-						if (tiles[63 - i].getTileColor() == playerColor)
-							tiles[63 - i].piece = new Queen(playerColor);
+						if (tiles[63 - i].getTileColor() == player1Color)
+							tiles[63 - i].piece = new Queen(player1Color);
 						else
-							tiles[63 - i].piece = new King(playerColor);
+							tiles[63 - i].piece = new King(player1Color);
 					}
 						break;
 
@@ -235,7 +231,7 @@ public class BoardHandler
 				}
 			}
 			else
-				tiles[63 - i].piece = new Pawn(playerColor);
+				tiles[63 - i].piece = new Pawn(player1Color);
 
 			tiles[63 - i].drawPieceSprite();
 			tiles[63 - i].piece.initialize(tiles[63 - i]);
@@ -249,31 +245,25 @@ public class BoardHandler
 	 * @param board
 	 * @author Pranav Badrinathan
 	 */
-	private static void mouseHandler(Board board)
+	private static void mouseHandler(Tile t, int j)
 	{
-		Tile[] tiles = getBoardAsTiles(board);
-
-		for (int i = 0; i < tiles.length; i++)
+		t.addMouseListener(new MouseAdapter()
 		{
-			int j = i;
-			tiles[i].addMouseListener(new MouseAdapter()
+			public void mouseClicked(MouseEvent e)
 			{
-				public void mouseClicked(MouseEvent e)
-				{
-					selectTiles(tiles[j], j, board, false);					
-				}
-				
-				public void mouseEntered(MouseEvent e) 
-				{
-					tiles[j].setBackground(UsefulMethods.blend(tiles[j].getBackground(), Reference.hoverColor));
-				}
-				
-				public void mouseExited(MouseEvent e) 
-				{
-					tiles[j].resetBackgroundColor();
-				}
-			});
-		}
+				selectTiles(t, j, false);
+			}
+			
+			public void mouseEntered(MouseEvent e) 
+			{
+				t.setBackground(UsefulMethods.blend(t.getBackground(), Reference.hoverColor));
+			}
+			
+			public void mouseExited(MouseEvent e) 
+			{
+				t.resetBackgroundColor();
+			}
+		});
 	}
 
 	/**
@@ -283,7 +273,7 @@ public class BoardHandler
 	 * @param index
 	 * @param board
 	 */
-	private static void selectTiles(Tile selectedTile, int index, Board board, boolean castle)
+	private static void selectTiles(Tile selectedTile, int index, boolean castle)
 	{
 		Component[] comps = board.getComponents();
 
@@ -300,7 +290,7 @@ public class BoardHandler
 			to = index;
 			Tile fromTile = (Tile) comps[to];
 
-			movePiece(from, to, board, true);
+			movePiece(from, to, true);
 
 			Tile[] kings = getTiles(PieceType.KING);
 
@@ -311,7 +301,7 @@ public class BoardHandler
 			{
 				if (king1.isUnderCheck)
 				{
-					movePiece(to, from, board, false);
+					movePiece(to, from, false);
 					System.out.println("ILLEGAL MOVE!");
 					
 					
@@ -321,7 +311,7 @@ public class BoardHandler
 			{
 				if (king2.isUnderCheck)
 				{
-					movePiece(to, from, board, false);
+					movePiece(to, from, false);
 					System.out.println("ILLEGAL MOVE!");
 				}
 			}
@@ -340,9 +330,9 @@ public class BoardHandler
 	 * @param toTileIndex
 	 * @param board
 	 */
-	public static void movePiece(int fromTileIndex, int toTileIndex, Board board, boolean validate)
+	public static void movePiece(int fromTileIndex, int toTileIndex, boolean validate)
 	{
-		Tile[] comps = getBoardAsTiles(board);
+		Tile[] comps = getBoardAsTiles();
 
 		Tile toTile = comps[toTileIndex];
 		Tile fromTile = comps[fromTileIndex];
@@ -385,8 +375,8 @@ public class BoardHandler
 	private static Piece checkPromotion(Tile toTile)
 	{
 		if (toTile.piece instanceof Pawn
-				&& ((toTile.position.y == 8 && toTile.piece.getColor() == ChessGUI.opponent.color)
-						|| (toTile.position.y == 1 && toTile.piece.getColor() == ChessGUI.player.color)))
+				&& ((toTile.position.y == 8 && toTile.piece.getColor() == ChessGUI.player2.color)
+						|| (toTile.position.y == 1 && toTile.piece.getColor() == ChessGUI.player1.color)))
 		{
 			Pawn p = (Pawn) toTile.piece;
 			return p.getPromotedPiece();
@@ -442,7 +432,7 @@ public class BoardHandler
 	 */
 	private static void killAllGhosts()
 	{
-		for (Tile tile : getBoardAsTiles(ChessGUI.board))
+		for (Tile tile : getBoardAsTiles())
 		{
 			if (tile.piece instanceof Ghost)
 			{

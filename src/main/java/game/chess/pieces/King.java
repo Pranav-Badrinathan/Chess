@@ -208,7 +208,11 @@ public class King extends Piece
 
 	public <T> boolean detectCheck(T tile)
 	{
-		ArrayList<Tile> tiles = new ArrayList<>(Arrays.asList(BoardHandler.getBoardAsTiles()));
+		// Get all the tiles with pieces on them.
+		ArrayList<Tile> tiles = new ArrayList<>(Arrays.stream(BoardHandler.getBoardAsTilesWithPiece())
+				.filter(x -> x.piece.pieceColor != this.pieceColor)
+				.collect(Collectors.toList()));
+		
 		Tile selectedTile = BoardHandler.getTiles(tile)[0];
 		
 		tiles = new ArrayList<>(tiles.stream().filter(x -> x.piece != null).collect(Collectors.toList()));;

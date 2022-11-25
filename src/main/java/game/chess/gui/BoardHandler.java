@@ -104,6 +104,16 @@ public class BoardHandler
 	{
 		return Arrays.stream(board.getComponents()).toArray(Tile[]::new);
 	}
+	
+	public static Tile[] getBoardAsTilesWithPiece()
+	{
+		ArrayList<Tile> tiles = new ArrayList<>(Arrays.stream(BoardHandler.getBoardAsTiles())
+				.filter(x -> x.piece != null)
+				.collect(Collectors.toList()));
+		
+		return (Tile[]) tiles.toArray(Tile[]::new);
+	}
+	
 
 	/**
 	 * Adds {@link Tile} objects to the {@link Board} object, horizontally from the
@@ -432,7 +442,7 @@ public class BoardHandler
 	 */
 	private static void killAllGhosts()
 	{
-		for (Tile tile : getBoardAsTiles())
+		for (Tile tile : getBoardAsTilesWithPiece())
 		{
 			if (tile.piece instanceof Ghost)
 			{

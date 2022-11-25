@@ -1,8 +1,5 @@
 package game.chess;
 
-import game.chess.gui.ChessGUI;
-import game.chess.util.SpriteRef;
-
 /**
  * The class that contains the <br> {@code public static void main(String[] args)}<br> method
  * 
@@ -18,7 +15,6 @@ public class Main
 	 */
 	public static void main(String[] args) 
 	{
-		SpriteRef.initImages();
-		ChessGUI.createFrame();
+		
 	}
 }
